@@ -115,7 +115,14 @@ function paint(t, all) {
     it.viz.draw(kit(ctx, w, hh), t); it.stage.present();
   }
 }
-function loop(now) { requestAnimationFrame(loop); if (!document.hidden) paint(now / 1000); }
+let lastPaint = -Infinity;
+function loop(now) {
+  requestAnimationFrame(loop);
+  if (!document.hidden && now - lastPaint >= 1000 / 60 - 0.5) {
+    lastPaint = now;
+    paint(now / 1000);
+  }
+}
 addEventListener('resize', () => {   // phones fire resize whenever the URL bar moves; only re-lay-out when the width really changed
   let changed = false;
   for (const it of items) if (it.box.clientWidth !== it.width) { it.width = it.box.clientWidth; it.stage.layout(); changed = true; }

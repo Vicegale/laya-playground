@@ -1,6 +1,6 @@
 # Laya playground
 
-A website, three games, a benchmark and an agent skill for [Laya](https://github.com/NandhaKishorM/laya), the open-source decision model: typed questions in, real probabilities out, one forward pass, no generated text. It runs on your own machine.
+A website, five games, a benchmark and an agent skill for [Laya](https://github.com/NandhaKishorM/laya), the open-source decision model: typed questions in, real probabilities out, one forward pass, no generated text. It runs on your own machine.
 
 The live site is at **[brainfunctioncollapse.com/laya](https://brainfunctioncollapse.com/laya)**. It has no model behind it and replays recorded runs. Clone this repository and the same pages run against the real model.
 
@@ -19,11 +19,42 @@ Then open <http://127.0.0.1:8770>. The first start downloads 2.3 GB of open weig
 
 You get the whole site, live:
 
-- `/` the landing page, where the model plays Flappy, a lane runner and Tetris itself, about 30 decisions a second
+- `/` the landing page, where the model plays Flappy, a lane runner, Tetris and Snake itself, about 30 decisions a second
+- `/#snake` classic Snake: Laya chooses a direction from the current state, or you steer with arrow keys, WASD or on-screen arrows
+- `/#checkpoint` the document inspection desk: compare permits, travel declarations and employer letters, with live Laya readings or human stamping
 - `/playground` the editor: write some text and a few typed questions, see every answer with its probabilities, compare all three checkpoints
 - `/about` why this exists
 
 The web server itself is the Python standard library and binds to loopback, so nothing is reachable from your network. The only dependency is `laya`.
+
+### Classify a question
+
+Ask the English checkpoint whether a question is `technical`, `product`, `billing`, or `other`, without starting the server:
+
+```bash
+.venv/bin/python tools/classify_question.py "How do I fix this Python error?"
+.venv/bin/python tools/classify_question.py --offline < question.txt
+```
+
+The script accepts a text argument or stdin and prints the complete model response as JSON, including the selected category and every option's probability. Use `--offline` once weights are cached.
+
+### Document checkpoint
+
+Open <http://127.0.0.1:8770/#checkpoint>. Choose **Easy**, **Medium** or **Hard**; the default Easy shift has **1,000 randomly generated travelers**. Expand **Shift generator** to choose 1–10,000 arrivals, the chance of invalid papers, one or multiple faults, and a replayable seed. **Start shift** uses the entered seed; **New shift** rerolls it. Easy has 3–4 papers and 12 fault families. Medium has 4–6 papers, identity supplements and work passes, and 25 families. Hard has 5–7 papers with access permits, health/identity records, diplomatic and asylum exceptions, and 36 families. Names, IDs, dates, employers, wording and valid exceptions vary.
+
+Inspect one traveler, auto-run the shift, or choose **You inspect** and stamp with A / D / R. Enable **Instant advance** beside auto-run to remove the reading delay for throughput tests. The throughput panel shows total, correct, incorrect and reviewed travelers per active wall-clock minute; paused time and human stamps are excluded. **Edit the documents** lets you test different wording and fields as unscored practice cases.
+
+The desk renders the same printed text sent to Laya. The stock English model reads country, purpose, appearance, occupational field, entry status, vaccination coverage and identity statements from separate full-paper inputs. The admission policy cross-checks those actual readings; code handles exact names, IDs, dates, measurements and printed seal/fingerprint codes. Probabilities, highlighted discrepancies, model latency and the full API payloads are visible. This uses structured text, with no OCR step.
+
+A static server supports human play on random shifts. Choose **Shift generator → Recorded demo → Start shift** for the twelve recorded arrivals. Matching document text uses real recorded answers and labels them as recorded; new wording needs the local model. Model errors earn visible citations. See [difficulty rules and inspiration](docs/checkpoint-levels.md), [real-model test results](docs/checkpoint-levels-validation.md) and [the implementation notes](docs/checkpoint.md).
+
+### Snake
+
+Open <http://127.0.0.1:8770/#snake> to watch the English model play. It receives the food position and four option descriptions grounded in their neighboring cells: open passage, wall, body or reversal into the neck. All four choices — up, right, down and left — stay available. The controller applies the returned direction directly, with no probability filtering or substitute move. Normal Snake physics rejects reversal into the neck; wall/body choices cause collisions. The feed shows the exact option descriptions, all four probabilities and the actual choice. Each step waits for a fresh answer. See [the grounded-option test results](docs/snake-grounded-options-validation.md) for measured improvements and remaining model mistakes.
+
+Choose **You play** for arrow keys or WASD, with on-screen arrows available on phones. Space restarts after a crash; otherwise a new life starts automatically. Pause/resume works in both modes. Static hosting replays a real model run. See [the Snake implementation notes](docs/snake.md).
+
+Use **Simulation speed** (0.1×–2×) to change game time immediately. Snake waits for the model if inference takes longer than the movement interval, so an old answer cannot carry it through additional cells.
 
 ### Without the model
 
@@ -66,7 +97,9 @@ Two of the source datasets restrict redistribution, so the sampled texts and the
 | `server.py`, `poc.py` | the local model server and the proof of concept it grew from |
 | `index.html`, `about.html`, `playground.html` | the three pages |
 | `static/` | styles, scripts, and the recorded data the public site replays |
-| `static/demos/` | the three games: Flappy, a lane runner and Tetris. Each one describes its situation in a sentence and asks one typed question |
+| `static/demos/` | the four arcade simulations and the document checkpoint's fixtures, translation and admission policy |
+| `static/checkpoint.js`, `static/checkpoint.css` | the document desk, inspector controls, live calls and recorded-answer fallback |
+| `static/demos/checkpoint-generator.js` | lazy seeded generation of large shifts with varied valid and invalid documents |
 | `skills/laya-integration/SKILL.md` | the agent skill |
 | `eval/` | the benchmark: dataset builder, tasks, runner |
 | `tools/` | recorders for the replays, and small site checks |
@@ -74,7 +107,14 @@ Two of the source datasets restrict redistribution, so the sampled texts and the
 Tools worth knowing:
 
 - `tools/record_run.mjs` records a real model-driven game run (`ONLY=tetris` records a single game); `tools/verify_replay.mjs` checks a recording replays identically
+- `tools/check_checkpoint_levels.mjs` checks 10,000 packets per difficulty, every fault family and the model/code boundary
+- `tools/evaluate_checkpoint_levels.mjs` measures stock-model parsing and admission on all three document levels
+- `tools/check_snake.mjs` checks Snake movement, growth, collisions, controls and deterministic replay
+- `tools/evaluate_snake.mjs` runs fixed-position and seeded headless tests against the real model; `--previous` reproduces the v5 prompt with identical game physics (`--baseline` retains the older v3 policy)
 - `tools/record_presets.py` records the playground's preset answers
+- `tools/record_checkpoint.mjs` records real document readings; `tools/check_checkpoint.mjs` verifies admission policy, translation and recording fidelity
+- `tools/check_checkpoint_generator.mjs` checks 10,000 generated cases for grading truth, reproducibility, variety and answer-key isolation
+- `tools/check_checkpoint_throughput.mjs` checks wall-clock rate accounting, pauses, outcome categories and resets
 - `tools/build_nav.py` stamps the one shared top bar into every page; `tools/build_faq.py` regenerates the FAQ structured data from the visible Q&As
 - `tools/check_widows.mjs` fails if any text block ends on a single word, at three widths
 

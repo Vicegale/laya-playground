@@ -1,0 +1,652 @@
+{
+  "date": "2026-10-06",
+  "model": "Laya 0.3.28, English, NVIDIA RTX 5080 CUDA",
+  "notes": [
+    "Actual local /api/predict responses; model latency advanced the fixed-step simulation.",
+    "Game-rule filtering is part of the new controller: these are controller results, not raw-model action accuracy.",
+    "Fixed positions and first three seeds informed implementation; five held-out seeds were not used for prompt selection.",
+    "Headless test jobs shared the local inference server; latency figures are not a performance benchmark.",
+    "Remaining crashes were trapped positions with no playable exit."
+  ],
+  "baseline": {
+    "policy": "v3-balanced-baseline",
+    "model": "english",
+    "requests": 611,
+    "truncations": 0,
+    "positions": {
+      "cases": 39,
+      "safe": 32,
+      "progress": 20,
+      "reversals": 3,
+      "failures": [
+        {
+          "name": "heading-up-food-4,0",
+          "action": "QUEUED UP",
+          "playable": [
+            "up",
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading up.\nThe food is to the right of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-up-food-0,4",
+          "action": "REJECTED DOWN",
+          "playable": [
+            "up",
+            "right",
+            "left"
+          ],
+          "closer": [],
+          "state": "The snake is heading up.\nThe food is below the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-up-food--4,0",
+          "action": "QUEUED UP",
+          "playable": [
+            "up",
+            "right",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The snake is heading up.\nThe food is to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-up-food-3,3",
+          "action": "QUEUED UP",
+          "playable": [
+            "up",
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading up.\nThe food is below and to the right of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-up-food--3,3",
+          "action": "QUEUED UP",
+          "playable": [
+            "up",
+            "right",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The snake is heading up.\nThe food is below and to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-right-food--4,0",
+          "action": "REJECTED LEFT",
+          "playable": [
+            "up",
+            "right",
+            "down"
+          ],
+          "closer": [],
+          "state": "The snake is heading right.\nThe food is to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        },
+        {
+          "name": "heading-right-food-3,-3",
+          "action": "REJECTED LEFT",
+          "playable": [
+            "up",
+            "right",
+            "down"
+          ],
+          "closer": [
+            "up",
+            "right"
+          ],
+          "state": "The snake is heading right.\nThe food is above and to the right of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        },
+        {
+          "name": "heading-right-food--3,-3",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "up",
+            "right",
+            "down"
+          ],
+          "closer": [
+            "up"
+          ],
+          "state": "The snake is heading right.\nThe food is above and to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        },
+        {
+          "name": "heading-down-food-4,0",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading down.\nThe food is to the right of the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-down-food-3,-3",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading down.\nThe food is above and to the right of the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-down-food--3,-3",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The snake is heading down.\nThe food is above and to the left of the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-left-food-3,-3",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "up",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "up"
+          ],
+          "state": "The snake is heading left.\nThe food is above and to the right of the head.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "heading-left-food--3,-3",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "up",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "up",
+            "left"
+          ],
+          "state": "The snake is heading left.\nThe food is above and to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "wall-ahead-up",
+          "action": "QUEUED UP",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading up.\nThe food is below and to the right of the head.\nThe cell above the head contains a wall.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "wall-ahead-right",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "up",
+            "down"
+          ],
+          "closer": [
+            "up"
+          ],
+          "state": "The snake is heading right.\nThe food is above and to the left of the head.\nThe cell above the head is empty.\nThe cell to the right of the head contains a wall.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        },
+        {
+          "name": "wall-ahead-down",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The snake is heading down.\nThe food is above and to the right of the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head contains a wall.\nThe cell to the left of the head is empty."
+        },
+        {
+          "name": "wall-ahead-left",
+          "action": "QUEUED DOWN",
+          "playable": [
+            "up",
+            "down"
+          ],
+          "closer": [
+            "up"
+          ],
+          "state": "The snake is heading left.\nThe food is above and to the right of the head.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains a wall."
+        },
+        {
+          "name": "body-corner-food-10,2",
+          "action": "QUEUED UP",
+          "playable": [
+            "down"
+          ],
+          "closer": [],
+          "state": "The snake is heading right.\nThe food is above the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        },
+        {
+          "name": "body-corner-food-14,6",
+          "action": "QUEUED RIGHT",
+          "playable": [
+            "down"
+          ],
+          "closer": [],
+          "state": "The snake is heading right.\nThe food is to the right of the head.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body."
+        }
+      ]
+    },
+    "runs": [
+      {
+        "seed": 7,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 2,
+        "best": 2,
+        "food": 9,
+        "crashes": 20,
+        "calls": 180,
+        "rejected": 53,
+        "stale": 0,
+        "guarded": 0,
+        "trapped": 0,
+        "changedPreferred": 0
+      },
+      {
+        "seed": 20261006,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 1,
+        "best": 3,
+        "food": 16,
+        "crashes": 16,
+        "calls": 206,
+        "rejected": 54,
+        "stale": 0,
+        "guarded": 0,
+        "trapped": 0,
+        "changedPreferred": 0
+      },
+      {
+        "seed": 31,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 0,
+        "best": 2,
+        "food": 13,
+        "crashes": 19,
+        "calls": 186,
+        "rejected": 9,
+        "stale": 0,
+        "guarded": 0,
+        "trapped": 0,
+        "changedPreferred": 0
+      }
+    ],
+    "totals": {
+      "food": 38,
+      "crashes": 55
+    }
+  },
+  "matched": {
+    "policy": "current",
+    "model": "english",
+    "requests": 1279,
+    "truncations": 0,
+    "positions": {
+      "cases": 39,
+      "safe": 39,
+      "progress": 37,
+      "reversals": 0,
+      "failures": [
+        {
+          "name": "heading-down-food--3,-3",
+          "action": "QUEUED RIGHT",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe snake faces south.\nThe food is above and to the left of the head."
+        },
+        {
+          "name": "wall-ahead-up",
+          "action": "QUEUED LEFT",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The cell above the head contains a wall.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe snake faces north.\nThe food is below and to the right of the head."
+        }
+      ]
+    },
+    "runs": [
+      {
+        "seed": 7,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 35,
+        "best": 35,
+        "food": 35,
+        "crashes": 1,
+        "calls": 430,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 189,
+        "trapped": 1,
+        "changedPreferred": 47
+      },
+      {
+        "seed": 20261006,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 9,
+        "best": 20,
+        "food": 29,
+        "crashes": 1,
+        "calls": 368,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 122,
+        "trapped": 1,
+        "changedPreferred": 22
+      },
+      {
+        "seed": 31,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 33,
+        "best": 33,
+        "food": 33,
+        "crashes": 0,
+        "calls": 442,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 154,
+        "trapped": 0,
+        "changedPreferred": 46
+      }
+    ],
+    "totals": {
+      "food": 97,
+      "crashes": 2
+    }
+  },
+  "heldout": {
+    "policy": "current",
+    "model": "english",
+    "requests": 1877,
+    "truncations": 0,
+    "positions": {
+      "cases": 39,
+      "safe": 39,
+      "progress": 37,
+      "reversals": 0,
+      "failures": [
+        {
+          "name": "heading-down-food--3,-3",
+          "action": "QUEUED RIGHT",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe snake faces south.\nThe food is above and to the left of the head."
+        },
+        {
+          "name": "wall-ahead-up",
+          "action": "QUEUED LEFT",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The cell above the head contains a wall.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe snake faces north.\nThe food is below and to the right of the head."
+        }
+      ]
+    },
+    "runs": [
+      {
+        "seed": 101,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 12,
+        "best": 18,
+        "food": 30,
+        "crashes": 1,
+        "calls": 356,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 101,
+        "trapped": 1,
+        "changedPreferred": 19
+      },
+      {
+        "seed": 202,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 7,
+        "best": 18,
+        "food": 25,
+        "crashes": 1,
+        "calls": 361,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 73,
+        "trapped": 1,
+        "changedPreferred": 30
+      },
+      {
+        "seed": 303,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 9,
+        "best": 19,
+        "food": 28,
+        "crashes": 1,
+        "calls": 359,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 111,
+        "trapped": 1,
+        "changedPreferred": 28
+      },
+      {
+        "seed": 404,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 0,
+        "best": 29,
+        "food": 29,
+        "crashes": 1,
+        "calls": 401,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 79,
+        "trapped": 1,
+        "changedPreferred": 26
+      },
+      {
+        "seed": 505,
+        "seconds": 60,
+        "speed": 1,
+        "latencyMs": 0,
+        "score": 12,
+        "best": 18,
+        "food": 30,
+        "crashes": 1,
+        "calls": 361,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 80,
+        "trapped": 1,
+        "changedPreferred": 37
+      }
+    ],
+    "totals": {
+      "food": 142,
+      "crashes": 5
+    }
+  },
+  "slow": {
+    "policy": "current",
+    "model": "english",
+    "requests": 408,
+    "truncations": 0,
+    "positions": {
+      "cases": 39,
+      "safe": 39,
+      "progress": 37,
+      "reversals": 0,
+      "failures": [
+        {
+          "name": "heading-down-food--3,-3",
+          "action": "QUEUED RIGHT",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe snake faces south.\nThe food is above and to the left of the head."
+        },
+        {
+          "name": "wall-ahead-up",
+          "action": "QUEUED LEFT",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The cell above the head contains a wall.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe snake faces north.\nThe food is below and to the right of the head."
+        }
+      ]
+    },
+    "runs": [
+      {
+        "seed": 909,
+        "seconds": 60,
+        "speed": 0.2,
+        "latencyMs": 0,
+        "score": 20,
+        "best": 20,
+        "food": 34,
+        "crashes": 1,
+        "calls": 369,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 93,
+        "trapped": 1,
+        "changedPreferred": 18
+      }
+    ],
+    "totals": {
+      "food": 34,
+      "crashes": 1
+    }
+  },
+  "delayed_fast": {
+    "policy": "current",
+    "model": "english",
+    "requests": 69,
+    "truncations": 0,
+    "positions": {
+      "cases": 39,
+      "safe": 39,
+      "progress": 37,
+      "reversals": 0,
+      "failures": [
+        {
+          "name": "heading-down-food--3,-3",
+          "action": "QUEUED RIGHT",
+          "playable": [
+            "right",
+            "down",
+            "left"
+          ],
+          "closer": [
+            "left"
+          ],
+          "state": "The cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe snake faces south.\nThe food is above and to the left of the head."
+        },
+        {
+          "name": "wall-ahead-up",
+          "action": "QUEUED LEFT",
+          "playable": [
+            "right",
+            "left"
+          ],
+          "closer": [
+            "right"
+          ],
+          "state": "The cell above the head contains a wall.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe snake faces north.\nThe food is below and to the right of the head."
+        }
+      ]
+    },
+    "runs": [
+      {
+        "seed": 808,
+        "seconds": 12,
+        "speed": 2,
+        "latencyMs": 175,
+        "score": 5,
+        "best": 5,
+        "food": 5,
+        "crashes": 0,
+        "calls": 30,
+        "rejected": 0,
+        "stale": 0,
+        "guarded": 10,
+        "trapped": 0,
+        "changedPreferred": 0
+      }
+    ],
+    "totals": {
+      "food": 5,
+      "crashes": 0
+    }
+  }
+}

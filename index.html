@@ -23,6 +23,7 @@
 <meta name="twitter:image" content="https://brainfunctioncollapse.com/laya/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" href="static/checkpoint.css">
 <script type="application/ld+json" id="ld">
 {
   "@context": "https://schema.org",
@@ -154,6 +155,38 @@
   },
   {
    "@type": "Question",
+   "name": "What does Laya see in Snake?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "The food’s position and four option descriptions giving each neighboring cell’s current condition: open passage, wall, snake body or reversal into the neck. All four options — up, right, down and left — are available in every question. Laya chooses the direction; the feed shows the exact descriptions, all four probabilities and its actual choice."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is there a hidden pathfinding solver?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Steering applies Laya's returned choice directly, with no probability filter or alternative direction chosen by code. Normal Snake rules reject a backward turn; moving into a wall or body causes a crash. Model mistakes remain visible. Try arrow keys, WASD or the on-screen arrows yourself."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What does Laya actually read?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Each submitted paper’s printed fields, in a separate request to the stock English model. Depending on difficulty, Laya reads country, purpose, appearance, work field, entry status, vaccination coverage and identity statements. The feed shows every question and probability. The documents are generated from structured data; this demo does not use OCR or image recognition."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Who checks names, numbers and dates?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Code compares exact names, IDs, dates, measurements and printed seal/fingerprint codes. Laya interprets the written statements; the entry rules cross-check those readings between documents. Hard includes registered aliases, diplomatic destinations and asylum exceptions. Model mistakes are played and scored. Open the model-input panel to see every request."
+   }
+  },
+  {
+   "@type": "Question",
    "name": "Where does it go wrong?",
    "acceptedAnswer": {
     "@type": "Answer",
@@ -225,7 +258,7 @@
 <div class="seam"></div>
 
 <nav class="index" aria-label="On this page">
-  <a href="./#versus">Vs Jev</a><a href="./#flappy">Flappy</a><a href="./#runner">Runner</a><a href="./#tetris">Tetris</a><a href="./#compare">Compare</a><a href="./#use-cases">Use cases</a><a href="./#skill">Skill</a><a href="./#run-it">Run it</a>
+  <a href="./#versus">Vs Jev</a><a href="./#flappy">Flappy</a><a href="./#runner">Runner</a><a href="./#tetris">Tetris</a><a href="./#snake">Snake</a><a href="./#checkpoint">Checkpoint</a><a href="./#compare">Compare</a><a href="./#use-cases">Use cases</a><a href="./#skill">Skill</a><a href="./#run-it">Run it</a>
 </nav>
 
 <section class="block" id="versus">
@@ -300,6 +333,34 @@
   </div>
 </section>
 
+<section class="block" id="snake">
+  <div class="head">
+    <h2>Find the food.<br>Watch the tail.</h2>
+    <div class="aside"><p class="lead">Classic Snake, with a growing body and solid walls. Laya reads the food position and each neighboring cell’s condition, then chooses from all four directions. Each step waits for a fresh answer.</p></div>
+  </div>
+  <div class="live game-mount" data-demo="snake"></div>
+  <div class="qa">
+    <div><h3>What does Laya see in Snake?</h3>
+      <p>The food’s position and four option descriptions giving each neighboring cell’s current condition: open passage, wall, snake body or reversal into the neck. All four options — up, right, down and left — are available in every question. Laya chooses the direction; the feed shows the exact descriptions, all four probabilities and its actual choice.</p></div>
+    <div><h3>Is there a hidden pathfinding solver?</h3>
+      <p>No. Steering applies Laya's returned choice directly, with no probability filter or alternative direction chosen by code. Normal Snake rules reject a backward turn; moving into a wall or body causes a crash. Model mistakes remain visible. Try arrow keys, WASD or the on-screen arrows yourself.</p></div>
+  </div>
+</section>
+
+<section class="block" id="checkpoint">
+  <div class="head">
+    <h2>Papers, please.<br>Do the stories agree?</h2>
+    <div class="aside"><p class="lead">Start with a passport and permit. Add work passes, identity records and vaccination papers, then test diplomatic and asylum exceptions. Choose Easy, Medium or Hard and watch Laya cross-check the readings, or inspect the papers yourself.</p></div>
+  </div>
+  <div data-checkpoint></div>
+  <div class="qa">
+    <div><h3>What does Laya actually read?</h3>
+      <p>Each submitted paper’s printed fields, in a separate request to the stock English model. Depending on difficulty, Laya reads country, purpose, appearance, work field, entry status, vaccination coverage and identity statements. The feed shows every question and probability. The documents are generated from structured data; this demo does not use OCR or image recognition.</p></div>
+    <div><h3>Who checks names, numbers and dates?</h3>
+      <p>Code compares exact names, IDs, dates, measurements and printed seal/fingerprint codes. Laya interprets the written statements; the entry rules cross-check those readings between documents. Hard includes registered aliases, diplomatic destinations and asylum exceptions. Model mistakes are played and scored. Open the model-input panel to see every request.</p></div>
+  </div>
+</section>
+
 <section class="block" id="compare">
   <div class="head">
     <h2>One email.<br>Five questions.<br>59 milliseconds.</h2>
@@ -365,7 +426,7 @@
 <section class="block" id="run-it">
   <div class="head">
     <h2>Clone it. Run it.<br>Keep it.</h2>
-    <div class="aside"><p class="lead">The model server, all three games, the benchmark and the recorder, in one repository. Apple silicon, NVIDIA or plain CPU.</p></div>
+    <div class="aside"><p class="lead">The model server, all five games, the benchmark and the recorders, in one repository. Apple silicon, NVIDIA or plain CPU.</p></div>
   </div>
   <pre class="cmd" id="runCmd" data-repo-text>git clone {repo}
 cd {dir}
@@ -393,6 +454,7 @@ uv venv --python 3.12 &amp;&amp; uv pip install laya
 <script type="module" src="static/nav.js"></script>
 <script type="module" src="static/app.js"></script>
 <script type="module" src="static/live.js"></script>
+<script type="module" src="static/checkpoint.js"></script>
 <script type="module" src="static/usecases.js"></script>
 </body>
 </html>
