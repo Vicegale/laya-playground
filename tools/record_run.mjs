@@ -10,7 +10,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import demos from '../static/demos/index.js';
-import { STEP, MIN_GAP, answersFrom } from '../static/sim.js';
+import { STEP, MIN_GAP, answersFrom, probabilitiesForRecording } from '../static/sim.js';
 
 const API = process.env.LAYA_API || 'http://127.0.0.1:8770';
 const SECONDS = +(process.env.SECONDS || 60), SEED = +(process.env.SEED || 20260920);
@@ -31,6 +31,7 @@ for (const demo of demos) {
   if (process.env.ONLY && !process.env.ONLY.split(',').includes(demo.id)) continue;   // ONLY=tetris leaves the other recordings alone
   if (health.models[demo.checkpoint] !== 'ready') throw new Error(`${demo.checkpoint} checkpoint is not loaded yet`);
   const inst = demo.create(SEED), params = Object.fromEntries(demo.params.map(p => [p.id, p.value]));
+  inst.setModelDriven?.(true);
   const total = Math.round(SECONDS / STEP), decisions = [];
   let step = 0;
   const advance = n => { for (let i = 0; i < n && step < total; i++, step++) inst.update(STEP, {}); };
@@ -39,11 +40,11 @@ for (const demo of demos) {
   for (let i = 0; i < 3; i++) await predict({ state: warm.state, questions: warm.questions, model: demo.checkpoint });
 
   while (step < total) {
-    if (inst.dead) { advance(1); continue; }
+    if (inst.dead || (inst.needsDecision && !inst.needsDecision())) { advance(1); continue; }
     const obs = inst.observe(), s0 = step, t0 = performance.now();
     const res = await predict({ state: obs.state, questions: obs.questions, model: demo.checkpoint });
     advance(Math.max(1, Math.ceil((performance.now() - t0) / 1000 / STEP)));   // the game kept running meanwhile
-    const probs = Object.values(Object.values(res.answers)[0].probabilities).map(p => +p.toFixed(3));
+    const probs = probabilitiesForRecording(obs, res.answers);
     inst.act(answersFrom(obs, probs), params, true);   // act on the rounded values so replay is bit-exact
     decisions.push([s0, step, probs, +res.latency_ms.toFixed(1)]);
     if (step - s0 < MIN_GAP) advance(MIN_GAP - (step - s0));
@@ -54,6 +55,7 @@ for (const demo of demos) {
     per_second: +(decisions.length / SECONDS).toFixed(1), median_ms: ms[ms.length >> 1] };
   writeFileSync(`${OUT}run-${demo.id}.json`, JSON.stringify({
     demo: demo.id, checkpoint: demo.checkpoint, seed: SEED, steps: total, params,
+    recordingVersion: demo.recordingVersion,
     recorded: new Date().toISOString().slice(0, 10), machine: process.env.MACHINE || 'Apple M1 Max, GPU', laya: health.version,
     summary, decisions }));
   console.log(demo.id.padEnd(8), JSON.stringify(summary));

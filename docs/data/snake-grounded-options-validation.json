@@ -1,0 +1,955 @@
+{
+  "tested": "2026-10-07",
+  "model": "stock Laya 0.3.28 English, RTX 5080 CUDA",
+  "constraints": {
+    "directions": [
+      "up",
+      "right",
+      "down",
+      "left"
+    ],
+    "checkpoint_trained": false,
+    "controller_filters": false,
+    "returned_choice_applied_directly": true
+  },
+  "results": {
+    "previous": {
+      "policy": "snake-state-v5-model-choice",
+      "model": "english",
+      "requests": 644,
+      "truncations": 0,
+      "positions": {
+        "cases": 39,
+        "safe": 34,
+        "progress": 17,
+        "reversals": 0,
+        "failures": [
+          {
+            "name": "heading-up-food-4,0",
+            "action": "QUEUED UP",
+            "playable": [
+              "up",
+              "right",
+              "left"
+            ],
+            "closer": [
+              "right"
+            ],
+            "state": "The snake is heading up. It can continue up or turn left or right; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe food is to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "up",
+                "probabilities": {
+                  "up": 0.4052,
+                  "right": 0.3531,
+                  "down": 0.1235,
+                  "left": 0.1181
+                },
+                "confidence": 0.1025,
+                "answer_confidence": 0.4052,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-up-food--4,0",
+            "action": "QUEUED UP",
+            "playable": [
+              "up",
+              "right",
+              "left"
+            ],
+            "closer": [
+              "left"
+            ],
+            "state": "The snake is heading up. It can continue up or turn left or right; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe food is to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "up",
+                "probabilities": {
+                  "up": 0.4517,
+                  "right": 0.2087,
+                  "down": 0.1646,
+                  "left": 0.1751
+                },
+                "confidence": 0.0709,
+                "answer_confidence": 0.4517,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-up-food-3,3",
+            "action": "QUEUED UP",
+            "playable": [
+              "up",
+              "right",
+              "left"
+            ],
+            "closer": [
+              "right"
+            ],
+            "state": "The snake is heading up. It can continue up or turn left or right; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe food is below and to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "up",
+                "probabilities": {
+                  "up": 0.5023,
+                  "right": 0.2249,
+                  "down": 0.172,
+                  "left": 0.1008
+                },
+                "confidence": 0.1232,
+                "answer_confidence": 0.5023,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-up-food--3,3",
+            "action": "QUEUED UP",
+            "playable": [
+              "up",
+              "right",
+              "left"
+            ],
+            "closer": [
+              "left"
+            ],
+            "state": "The snake is heading up. It can continue up or turn left or right; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head contains the snake's body.\nThe cell to the left of the head is empty.\nThe food is below and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "up",
+                "probabilities": {
+                  "up": 0.5034,
+                  "right": 0.1888,
+                  "down": 0.1798,
+                  "left": 0.128
+                },
+                "confidence": 0.1114,
+                "answer_confidence": 0.5034,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-right-food-0,-4",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "up",
+              "right",
+              "down"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is above the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.203,
+                  "right": 0.3488,
+                  "down": 0.2048,
+                  "left": 0.2435
+                },
+                "confidence": 0.0191,
+                "answer_confidence": 0.3488,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-right-food-0,4",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "up",
+              "right",
+              "down"
+            ],
+            "closer": [
+              "down"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is below the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.153,
+                  "right": 0.403,
+                  "down": 0.2366,
+                  "left": 0.2075
+                },
+                "confidence": 0.0472,
+                "answer_confidence": 0.403,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-right-food--3,3",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "up",
+              "right",
+              "down"
+            ],
+            "closer": [
+              "down"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is below and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.1862,
+                  "right": 0.3568,
+                  "down": 0.2171,
+                  "left": 0.2399
+                },
+                "confidence": 0.0228,
+                "answer_confidence": 0.3568,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-right-food--3,-3",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "up",
+              "right",
+              "down"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is above and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.2045,
+                  "right": 0.391,
+                  "down": 0.1892,
+                  "left": 0.2152
+                },
+                "confidence": 0.0353,
+                "answer_confidence": 0.391,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-down-food-4,0",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "right",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "right"
+            ],
+            "state": "The snake is heading down. It can continue down or turn right or left; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.1525,
+                  "right": 0.2686,
+                  "down": 0.397,
+                  "left": 0.1818
+                },
+                "confidence": 0.0503,
+                "answer_confidence": 0.397,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-down-food--4,0",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "right",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "left"
+            ],
+            "state": "The snake is heading down. It can continue down or turn right or left; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.1315,
+                  "right": 0.1848,
+                  "down": 0.4663,
+                  "left": 0.2173
+                },
+                "confidence": 0.0866,
+                "answer_confidence": 0.4663,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-down-food-3,-3",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "right",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "right"
+            ],
+            "state": "The snake is heading down. It can continue down or turn right or left; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is above and to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.1328,
+                  "right": 0.2103,
+                  "down": 0.4997,
+                  "left": 0.1572
+                },
+                "confidence": 0.1102,
+                "answer_confidence": 0.4997,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-down-food--3,-3",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "right",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "left"
+            ],
+            "state": "The snake is heading down. It can continue down or turn right or left; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is above and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.1254,
+                  "right": 0.1611,
+                  "down": 0.4996,
+                  "left": 0.214
+                },
+                "confidence": 0.112,
+                "answer_confidence": 0.4996,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-left-food-0,-4",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "up",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading left. It can continue left or turn down or up; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is above the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.2103,
+                  "right": 0.2085,
+                  "down": 0.3543,
+                  "left": 0.2268
+                },
+                "confidence": 0.0197,
+                "answer_confidence": 0.3543,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-left-food--4,0",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "up",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "left"
+            ],
+            "state": "The snake is heading left. It can continue left or turn down or up; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.23,
+                  "right": 0.1952,
+                  "down": 0.3562,
+                  "left": 0.2186
+                },
+                "confidence": 0.0211,
+                "answer_confidence": 0.3562,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-left-food-3,-3",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "up",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading left. It can continue left or turn down or up; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is above and to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.2147,
+                  "right": 0.2367,
+                  "down": 0.3772,
+                  "left": 0.1714
+                },
+                "confidence": 0.0324,
+                "answer_confidence": 0.3772,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "heading-left-food--3,-3",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "up",
+              "down",
+              "left"
+            ],
+            "closer": [
+              "up",
+              "left"
+            ],
+            "state": "The snake is heading left. It can continue left or turn down or up; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head is empty.\nThe food is above and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.2368,
+                  "right": 0.1952,
+                  "down": 0.3531,
+                  "left": 0.2148
+                },
+                "confidence": 0.0204,
+                "answer_confidence": 0.3531,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "wall-ahead-right",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "up",
+              "down"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains a wall.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is above and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.2007,
+                  "right": 0.2904,
+                  "down": 0.2652,
+                  "left": 0.2437
+                },
+                "confidence": 0.0064,
+                "answer_confidence": 0.2904,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "wall-ahead-down",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "right",
+              "left"
+            ],
+            "closer": [
+              "right"
+            ],
+            "state": "The snake is heading down. It can continue down or turn right or left; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head is empty.\nThe cell below the head contains a wall.\nThe cell to the left of the head is empty.\nThe food is above and to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.1299,
+                  "right": 0.2246,
+                  "down": 0.5038,
+                  "left": 0.1417
+                },
+                "confidence": 0.1179,
+                "answer_confidence": 0.5038,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "wall-ahead-left",
+            "action": "QUEUED DOWN",
+            "playable": [
+              "up",
+              "down"
+            ],
+            "closer": [
+              "up"
+            ],
+            "state": "The snake is heading left. It can continue left or turn down or up; it cannot reverse.\nThe cell above the head is empty.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains a wall.\nThe food is above and to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "down",
+                "probabilities": {
+                  "up": 0.2113,
+                  "right": 0.2592,
+                  "down": 0.3505,
+                  "left": 0.1789
+                },
+                "confidence": 0.0234,
+                "answer_confidence": 0.3505,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "body-corner-food-10,2",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "down"
+            ],
+            "closer": [],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is above the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.183,
+                  "right": 0.3759,
+                  "down": 0.2165,
+                  "left": 0.2246
+                },
+                "confidence": 0.0296,
+                "answer_confidence": 0.3759,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "body-corner-food-14,6",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "down"
+            ],
+            "closer": [],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is to the right of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.1676,
+                  "right": 0.4599,
+                  "down": 0.1948,
+                  "left": 0.1777
+                },
+                "confidence": 0.075,
+                "answer_confidence": 0.4599,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          },
+          {
+            "name": "body-corner-food-7,9",
+            "action": "QUEUED RIGHT",
+            "playable": [
+              "down"
+            ],
+            "closer": [
+              "down"
+            ],
+            "state": "The snake is heading right. It can continue right or turn up or down; it cannot reverse.\nThe cell above the head contains the snake's body.\nThe cell to the right of the head contains the snake's body.\nThe cell below the head is empty.\nThe cell to the left of the head contains the snake's body.\nThe food is below and to the left of the head.",
+            "answers": {
+              "direction": {
+                "type": "choice",
+                "choice": "right",
+                "probabilities": {
+                  "up": 0.1534,
+                  "right": 0.3753,
+                  "down": 0.2288,
+                  "left": 0.2424
+                },
+                "confidence": 0.036,
+                "answer_confidence": 0.3753,
+                "action": {
+                  "act_probability": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "runs": [
+        {
+          "seed": 7,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 0,
+          "best": 1,
+          "food": 1,
+          "crashes": 17,
+          "calls": 197,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 20261006,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 0,
+          "best": 1,
+          "food": 1,
+          "crashes": 16,
+          "calls": 203,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 31,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 0,
+          "best": 1,
+          "food": 1,
+          "crashes": 16,
+          "calls": 205,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        }
+      ],
+      "totals": {
+        "food": 3,
+        "crashes": 49
+      }
+    },
+    "matched": {
+      "policy": "snake-state-v6-grounded-options",
+      "model": "english",
+      "requests": 1189,
+      "truncations": 0,
+      "positions": {
+        "cases": 39,
+        "safe": 39,
+        "progress": 39,
+        "reversals": 0,
+        "failures": []
+      },
+      "runs": [
+        {
+          "seed": 7,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 27,
+          "best": 27,
+          "food": 28,
+          "crashes": 1,
+          "calls": 407,
+          "rejected": 1,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 20261006,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 6,
+          "best": 27,
+          "food": 33,
+          "crashes": 1,
+          "calls": 382,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 31,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 5,
+          "best": 21,
+          "food": 33,
+          "crashes": 2,
+          "calls": 361,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        }
+      ],
+      "totals": {
+        "food": 94,
+        "crashes": 4
+      }
+    },
+    "heldout": {
+      "policy": "snake-state-v6-grounded-options",
+      "model": "english",
+      "requests": 1945,
+      "truncations": 0,
+      "positions": {
+        "cases": 39,
+        "safe": 39,
+        "progress": 39,
+        "reversals": 0,
+        "failures": []
+      },
+      "runs": [
+        {
+          "seed": 101,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 13,
+          "best": 25,
+          "food": 38,
+          "crashes": 1,
+          "calls": 382,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 202,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 1,
+          "best": 30,
+          "food": 31,
+          "crashes": 1,
+          "calls": 423,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 303,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 6,
+          "best": 18,
+          "food": 24,
+          "crashes": 1,
+          "calls": 362,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 404,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 9,
+          "best": 16,
+          "food": 25,
+          "crashes": 1,
+          "calls": 351,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        },
+        {
+          "seed": 505,
+          "seconds": 60,
+          "speed": 1,
+          "latencyMs": 0,
+          "score": 3,
+          "best": 26,
+          "food": 29,
+          "crashes": 1,
+          "calls": 388,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        }
+      ],
+      "totals": {
+        "food": 147,
+        "crashes": 5
+      }
+    },
+    "latency": {
+      "policy": "snake-state-v6-grounded-options",
+      "model": "english",
+      "requests": 69,
+      "truncations": 0,
+      "positions": {
+        "cases": 39,
+        "safe": 39,
+        "progress": 39,
+        "reversals": 0,
+        "failures": []
+      },
+      "runs": [
+        {
+          "seed": 808,
+          "seconds": 12,
+          "speed": 2,
+          "latencyMs": 175,
+          "score": 5,
+          "best": 5,
+          "food": 5,
+          "crashes": 0,
+          "calls": 30,
+          "rejected": 0,
+          "stale": 0,
+          "guarded": 0,
+          "trapped": 0,
+          "changedPreferred": 0
+        }
+      ],
+      "totals": {
+        "food": 5,
+        "crashes": 0
+      }
+    }
+  },
+  "recording": {
+    "score": 6,
+    "best": 27,
+    "crashes": 1,
+    "decisions": 382,
+    "per_second": 6.4,
+    "median_ms": 11.7
+  },
+  "browser": {
+    "requests": 12,
+    "actions": 12,
+    "all_four_directions": true,
+    "stock_english": true,
+    "substituted_choices": 0,
+    "errors": [],
+    "desktop_horizontal_overflow": false,
+    "mobile_horizontal_overflow": false,
+    "screenshot_capture": "failed in native preview client",
+    "instrumentation_restored": true,
+    "game_left_paused": true
+  }
+}

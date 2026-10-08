@@ -30,6 +30,7 @@ HOST, PORT = "127.0.0.1", int(os.environ.get("PORT", "8770"))
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PAGES = {"/": "index.html", "/index.html": "index.html", "/about": "about.html", "/about.html": "about.html",
          "/playground": "playground.html", "/playground.html": "playground.html",
+         "/workflow": "workflow.html", "/workflow.html": "workflow.html",
          "/robots.txt": "robots.txt", "/sitemap.xml": "sitemap.xml", "/og.png": "og.png", "/favicon.svg": "favicon.svg"}
 PUBLIC = tuple(os.path.realpath(os.path.join(ROOT, d)) + os.sep for d in ("static", "skills"))  # served as files
 MODELS = ("english", "multilingual", "typed-decisions")
@@ -129,6 +130,7 @@ def predict(payload):
 class Handler(BaseHTTPRequestHandler):
     server_version = "laya-playground"
     protocol_version = "HTTP/1.1"  # keep-alive: the live demos send 20+ requests a second
+    disable_nagle_algorithm = True  # send the JSON body immediately after the response headers
 
     def log_request(self, code="-", size="-"):
         if str(code) == "200" and self.path.startswith(("/api/health", "/api/predict", "/static/", "/skills/")):
@@ -163,7 +165,7 @@ class Handler(BaseHTTPRequestHandler):
             self._static(PAGES[path], root_file=True)
         elif path == "/api/health":
             self._send(200, {"models": STATUS, "version": laya.__version__, "torch": torch.__version__,
-                             "device": "mps" if torch.backends.mps.is_available() else "cpu"})
+                             "device": "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"})
         elif path == "/api/presets":
             self._send(200, PRESETS)
         elif path.startswith(("/static/", "/skills/")):

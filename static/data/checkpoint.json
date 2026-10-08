@@ -1,0 +1,1099 @@
+{
+  "recorded": "2026-10-06T15:58:31.453Z",
+  "machine": "NVIDIA RTX 5080, CUDA",
+  "laya": "0.3.28",
+  "threshold": 0.6,
+  "summary": {
+    "correct": 10,
+    "wrong": 1,
+    "review": 1,
+    "document_calls": 28,
+    "median_document_ms": 12.7
+  },
+  "cases": [
+    {
+      "id": "arrival-01",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I want to visit the observatory, see the old harbor, and enjoy a quiet holiday.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.1,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0505,
+                "tourism": 0.8352,
+                "transit": 0.0614,
+                "study": 0.0528
+              },
+              "confidence": 0.547,
+              "answer_confidence": 0.8352,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 79,
+            "output_tokens": 0,
+            "state_tokens": 19,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 11.5,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-02",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I have been hired to repair engines at the shipyard for a monthly salary.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"We confirm that this traveler is employed as a repair technician at our shipyard. Their paid position starts this week.\",\"questions\":{\"employment\":{\"type\":\"noul\",\"instructions\":\"Does this letter confirm that the traveler has a paid job?\"}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 11.8,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9856,
+                "tourism": 0.0035,
+                "transit": 0.0054,
+                "study": 0.0055
+              },
+              "confidence": 0.9344,
+              "answer_confidence": 0.9856,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 76,
+            "output_tokens": 0,
+            "state_tokens": 16,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.7,
+          "device": "cuda"
+        },
+        "letter": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "employment": {
+              "type": "noul",
+              "noul": 0.9663,
+              "confidence": 0.9663,
+              "answer_confidence": 0.9663,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 63,
+            "output_tokens": 0,
+            "state_tokens": 24,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 11.7,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-03",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I want to visit the observatory, see the old harbor, and enjoy a quiet holiday.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 13,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0505,
+                "tourism": 0.8352,
+                "transit": 0.0614,
+                "study": 0.0528
+              },
+              "confidence": 0.547,
+              "answer_confidence": 0.8352,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 79,
+            "output_tokens": 0,
+            "state_tokens": 19,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 11.7,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-04",
+      "fingerprint": "[{\"state\":\"Paid employment in repair and maintenance services.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I have been hired to repair engines at the shipyard for a monthly salary.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"We confirm that this traveler is employed as a repair technician at our shipyard. Their paid position starts this week.\",\"questions\":{\"employment\":{\"type\":\"noul\",\"instructions\":\"Does this letter confirm that the traveler has a paid job?\"}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9493,
+                "tourism": 0.0133,
+                "transit": 0.0242,
+                "study": 0.0133
+              },
+              "confidence": 0.8167,
+              "answer_confidence": 0.9493,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 71,
+            "output_tokens": 0,
+            "state_tokens": 9,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.8,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9856,
+                "tourism": 0.0035,
+                "transit": 0.0054,
+                "study": 0.0055
+              },
+              "confidence": 0.9344,
+              "answer_confidence": 0.9856,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 76,
+            "output_tokens": 0,
+            "state_tokens": 16,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.1,
+          "device": "cuda"
+        },
+        "letter": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "employment": {
+              "type": "noul",
+              "noul": 0.9663,
+              "confidence": 0.9663,
+              "answer_confidence": 0.9663,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 63,
+            "output_tokens": 0,
+            "state_tokens": 24,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.3,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-05",
+      "fingerprint": "[{\"state\":\"Transit through the station en route to another destination.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I am changing ships here on my way to the mining colony.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "transit",
+              "probabilities": {
+                "work": 0.005,
+                "tourism": 0.0141,
+                "transit": 0.9775,
+                "study": 0.0034
+              },
+              "confidence": 0.9075,
+              "answer_confidence": 0.9775,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 73,
+            "output_tokens": 0,
+            "state_tokens": 11,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.3,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "transit",
+              "probabilities": {
+                "work": 0.058,
+                "tourism": 0.0403,
+                "transit": 0.8816,
+                "study": 0.0201
+              },
+              "confidence": 0.6507,
+              "answer_confidence": 0.8816,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 73,
+            "output_tokens": 0,
+            "state_tokens": 13,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 13.8,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-06",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I want to visit the observatory, see the old harbor, and enjoy a quiet holiday.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.5,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0505,
+                "tourism": 0.8352,
+                "transit": 0.0614,
+                "study": 0.0528
+              },
+              "confidence": 0.547,
+              "answer_confidence": 0.8352,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 79,
+            "output_tokens": 0,
+            "state_tokens": 19,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 13.6,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-07",
+      "fingerprint": "[{\"state\":\"Paid employment in repair and maintenance services.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I have been hired to repair engines at the shipyard for a monthly salary.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"We confirm that this traveler is employed as a repair technician at our shipyard. Their paid position starts this week.\",\"questions\":{\"employment\":{\"type\":\"noul\",\"instructions\":\"Does this letter confirm that the traveler has a paid job?\"}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9493,
+                "tourism": 0.0133,
+                "transit": 0.0242,
+                "study": 0.0133
+              },
+              "confidence": 0.8167,
+              "answer_confidence": 0.9493,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 71,
+            "output_tokens": 0,
+            "state_tokens": 9,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.5,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9856,
+                "tourism": 0.0035,
+                "transit": 0.0054,
+                "study": 0.0055
+              },
+              "confidence": 0.9344,
+              "answer_confidence": 0.9856,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 76,
+            "output_tokens": 0,
+            "state_tokens": 16,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.5,
+          "device": "cuda"
+        },
+        "letter": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "employment": {
+              "type": "noul",
+              "noul": 0.9663,
+              "confidence": 0.9663,
+              "answer_confidence": 0.9663,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 63,
+            "output_tokens": 0,
+            "state_tokens": 24,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 15,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-08",
+      "fingerprint": "[{\"state\":\"Paid employment in repair and maintenance services.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I have been hired to repair engines at the shipyard for a monthly salary.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9493,
+                "tourism": 0.0133,
+                "transit": 0.0242,
+                "study": 0.0133
+              },
+              "confidence": 0.8167,
+              "answer_confidence": 0.9493,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 71,
+            "output_tokens": 0,
+            "state_tokens": 9,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.2,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9856,
+                "tourism": 0.0035,
+                "transit": 0.0054,
+                "study": 0.0055
+              },
+              "confidence": 0.9344,
+              "answer_confidence": 0.9856,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 76,
+            "output_tokens": 0,
+            "state_tokens": 16,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.9,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-09",
+      "fingerprint": "[{\"state\":\"Enrollment in an academic course. Employment is not authorized.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I am beginning a semester at the navigation academy.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "study",
+              "probabilities": {
+                "work": 0.2858,
+                "tourism": 0.0828,
+                "transit": 0.1314,
+                "study": 0.4999
+              },
+              "confidence": 0.1505,
+              "answer_confidence": 0.4999,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 75,
+            "output_tokens": 0,
+            "state_tokens": 13,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.3,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "study",
+              "probabilities": {
+                "work": 0.1349,
+                "tourism": 0.0325,
+                "transit": 0.0664,
+                "study": 0.7662
+              },
+              "confidence": 0.4476,
+              "answer_confidence": 0.7662,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 70,
+            "output_tokens": 0,
+            "state_tokens": 10,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-10",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I want to visit the observatory, see the old harbor, and enjoy a quiet holiday.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 14.1,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0505,
+                "tourism": 0.8352,
+                "transit": 0.0614,
+                "study": 0.0528
+              },
+              "confidence": 0.547,
+              "answer_confidence": 0.8352,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 79,
+            "output_tokens": 0,
+            "state_tokens": 19,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.3,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-11",
+      "fingerprint": "[{\"state\":\"Paid employment in repair and maintenance services.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I have been hired to repair engines at the shipyard for a monthly salary.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"The job offer has been withdrawn. We cannot confirm employment; there is no position available for this traveler.\",\"questions\":{\"employment\":{\"type\":\"noul\",\"instructions\":\"Does this letter confirm that the traveler has a paid job?\"}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9493,
+                "tourism": 0.0133,
+                "transit": 0.0242,
+                "study": 0.0133
+              },
+              "confidence": 0.8167,
+              "answer_confidence": 0.9493,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 71,
+            "output_tokens": 0,
+            "state_tokens": 9,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.2,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "work",
+              "probabilities": {
+                "work": 0.9856,
+                "tourism": 0.0035,
+                "transit": 0.0054,
+                "study": 0.0055
+              },
+              "confidence": 0.9344,
+              "answer_confidence": 0.9856,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 76,
+            "output_tokens": 0,
+            "state_tokens": 16,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.4,
+          "device": "cuda"
+        },
+        "letter": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "employment": {
+              "type": "noul",
+              "noul": 0.6835,
+              "confidence": 0.6835,
+              "answer_confidence": 0.6835,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 61,
+            "output_tokens": 0,
+            "state_tokens": 22,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 12.9,
+          "device": "cuda"
+        }
+      }
+    },
+    {
+      "id": "arrival-12",
+      "fingerprint": "[{\"state\":\"Leisure visits and sightseeing only. Paid employment is not permitted.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What type of visit is permitted by this document?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"},{\"state\":\"I am here on holiday to visit my sister. I am not taking a job or enrolling in a course.\",\"questions\":{\"purpose\":{\"type\":\"choice\",\"instructions\":\"What is the purpose of this visit?\",\"criteria\":{\"work\":\"paid employment, a job, or commercial business\",\"tourism\":\"holiday, sightseeing, visiting friends or family\",\"transit\":\"traveling through on the way to another destination\",\"study\":\"attending an academic course as a student\"}}},\"model\":\"english\",\"lang\":\"en\"}]",
+      "responses": {
+        "permit": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0738,
+                "tourism": 0.8149,
+                "transit": 0.0632,
+                "study": 0.048
+              },
+              "confidence": 0.5098,
+              "answer_confidence": 0.8149,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 77,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 11.6,
+          "device": "cuda"
+        },
+        "declaration": {
+          "model": "laya-rl-agent",
+          "answers": {
+            "purpose": {
+              "type": "choice",
+              "choice": "tourism",
+              "probabilities": {
+                "work": 0.0392,
+                "tourism": 0.802,
+                "transit": 0.126,
+                "study": 0.0328
+              },
+              "confidence": 0.5116,
+              "answer_confidence": 0.802,
+              "action": {
+                "act_probability": 1
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 83,
+            "output_tokens": 0,
+            "state_tokens": 23,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "routing": {
+            "model": "english",
+            "repo": "convaiinnovations/laya",
+            "reason": "explicit model='english'",
+            "detection": null,
+            "workflow": null
+          },
+          "latency_ms": 13.6,
+          "device": "cuda"
+        }
+      }
+    }
+  ]
+}

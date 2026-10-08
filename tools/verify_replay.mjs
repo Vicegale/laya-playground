@@ -11,6 +11,7 @@ let failed = false;
 for (const demo of demos) {
   const run = JSON.parse(readFileSync(fileURLToPath(new URL(`../static/data/run-${demo.id}.json`, import.meta.url))));
   const inst = demo.create(run.seed), d = run.decisions;
+  inst.setModelDriven?.(true);
   let ri = 0, pending = null, applied = 0;
   for (let step = 0; step < run.steps; step++) {
     if (pending && d[ri][1] === step) { inst.act(answersFrom(pending, d[ri++][2]), run.params, true); pending = null; applied++; }
