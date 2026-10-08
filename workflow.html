@@ -5,7 +5,7 @@
 <script>document.write('<base href="'+location.pathname.replace(/[^\/]*$/,'')+'">');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Laya workflow playground</title>
-<meta name="description" content="Build multilayered decision workflows with Laya, exact conditions, iteration, variables and nested subflows.">
+<meta name="description" content="Build decision workflows with Laya, exact conditions, switches, grouping, maps, filters, iteration, variables and nested subflows.">
 <meta name="author" content="brain function collapse">
 <meta name="robots" content="noindex">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -28,43 +28,82 @@
       <option value="">Examples…</option>
       <option value="list">Classify a list</option>
       <option value="branch">Semantic branch + exact rule</option>
+      <option value="collections">Filter and map a list</option>
+      <option value="csv">Tag CSV rows</option>
+      <option value="switch">Route by email type</option>
+      <option value="groups">Group emails and export</option>
+      <option value="keyed-groups">Export other emails</option>
     </select>
-    <button id="fitBtn" type="button">Fit canvas</button>
     <span class="spacer"></span>
     <span id="saveState" class="saved">saved locally</span>
-    <select id="model" aria-label="Checkpoint">
-      <option value="">auto-route</option>
-      <option value="english">english</option>
-      <option value="multilingual">multilingual</option>
-      <option value="typed-decisions">typed-decisions</option>
-    </select>
-    <input id="lang" type="text" maxlength="12" placeholder="lang, e.g. pl" aria-label="Language hint">
-    <button id="importBtn" type="button">Import</button><input id="importFile" type="file" accept="application/json,.json" hidden>
-    <button id="exportBtn" type="button">Export</button>
-    <button id="resetBtn" type="button">New</button>
-    <button id="runBtn" type="button">Run</button>
+    <div class="workflow-file-actions" aria-label="Workflow files"><button id="resetBtn" type="button">New</button><button id="importBtn" type="button" title="Import workflow JSON">Import</button><input id="importFile" type="file" accept="application/json,.json" hidden><button id="exportBtn" type="button" title="Export workflow JSON">Export</button></div>
+    <button id="runBtn" type="button" title="Run workflow (Ctrl/⌘ Enter)">Run</button>
   </div>
+  <div class="workflow-editbar" aria-label="Editing tools">
+    <button id="undoBtn" type="button" disabled title="Undo (Ctrl/⌘ Z)">↶ Undo</button>
+    <button id="redoBtn" type="button" disabled title="Redo (Ctrl/⌘ Shift Z)">↷ Redo</button>
+    <button id="duplicateBtn" type="button" disabled title="Duplicate selected node (Ctrl/⌘ D)">Duplicate</button>
+    <button id="fitBtn" type="button">Fit canvas</button>
+    <button id="libraryBtn" type="button">Library</button>
+    <span id="canvasMode"></span>
+    <details class="run-settings"><summary>Run settings</summary><div><label>Model<select id="model" aria-label="Checkpoint"><option value="">Automatic</option><option value="english">English</option><option value="multilingual">Multilingual</option><option value="typed-decisions">Typed decisions</option></select></label><label>Language hint<input id="lang" type="text" maxlength="12" placeholder="Optional, e.g. pl" aria-label="Language hint"></label></div></details>
+  </div>
+  <div class="workflow-runbar"><p id="runSummary" role="status">Run to see outputs on the nodes.</p><div class="runbar-actions"><button id="inspectFailureBtn" type="button" hidden>Inspect failure</button><button id="runOutputBtn" type="button" disabled hidden>Final output</button><button id="exportDiagnosticsBtn" type="button" disabled hidden>Export diagnostics</button></div></div>
   <div class="workflow-main">
     <aside class="workflow-sidebar">
-      <div class="workflow-panel-title">Nodes</div>
-      <div id="palette" class="palette"></div>
-      <div class="run-input-wrap">
-        <label for="runInput"><span>Run input</span><span>JSON or text</span></label>
-        <textarea id="runInput" spellcheck="false"></textarea>
-      </div>
+      <section class="run-input-wrap" aria-labelledby="runInputTitle">
+        <div class="input-panel-head">
+          <div class="input-panel-title"><span class="input-panel-icon" aria-hidden="true">IN</span><label id="runInputTitle" for="runInput">Workflow input</label></div>
+          <button id="expandInputBtn" type="button" title="Open a larger input editor" aria-haspopup="dialog">Expand ↗</button>
+        </div>
+        <textarea id="runInput" spellcheck="false" aria-describedby="inputHelp" placeholder='Paste text or JSON, e.g.&#10;{"text": "Hello world"}'></textarea>
+        <div class="input-editor-tools"><span id="inputType" class="input-type">Empty</span><span id="inputSummary"></span><button id="formatInputBtn" type="button">Format JSON</button></div>
+        <p id="inputHelp" class="input-help">Use <code>{{input}}</code> in your nodes.</p>
+      </section>
+      <section class="node-palette-wrap" aria-label="Add nodes">
+        <div class="workflow-panel-title">Add nodes <span>click or drag</span></div>
+        <div id="palette" class="palette"></div>
+      </section>
     </aside>
     <section class="workflow-canvas-wrap" aria-label="Workflow canvas">
       <div id="workflowCanvas" class="workflow-canvas"></div>
+      <div id="canvasAnnotations" class="canvas-annotations"></div>
       <div id="breadcrumbs" class="workflow-breadcrumbs" aria-label="Workflow breadcrumbs"></div>
-      <div class="workflow-canvas-tip">drag nodes · connect ports · double-click nested nodes · Ctrl/⌘ + wheel to zoom</div>
+      <div id="viewItemPickers" class="view-item-pickers" hidden></div>
+      <p id="canvasNotice" class="canvas-notice"></p>
+      <div class="workflow-canvas-tip">Connect ports to build a flow · Ctrl/⌘ + wheel to zoom</div>
     </section>
     <aside class="workflow-inspector"><div id="inspector"></div></aside>
   </div>
-  <section class="workflow-trace" aria-live="polite">
-    <div class="trace-summary"><h3>Execution</h3><p>Run the graph to see every deterministic branch, Laya decision and nested iteration in order. Decision probabilities are preserved in the trace.</p></div>
-    <div id="trace" class="trace-list"><p class="muted">Run the workflow to see each decision and branch here.</p></div>
-  </section>
 </main>
+<dialog id="diagnosticDialog" class="diagnostic-dialog" aria-labelledby="diagnosticTitle">
+  <header class="diagnostic-header"><div><h2 id="diagnosticTitle">Step diagnostics</h2><p id="diagnosticLocation"></p></div><button id="closeDiagnosticBtn" type="button" aria-label="Close diagnostics">×</button></header>
+  <div class="diagnostic-nav"><button id="jumpDiagnosticBtn" type="button">Show node in canvas</button><select id="diagnosticStepPicker" aria-label="Execution of this node" hidden></select><p id="diagnosticNotice" role="status"></p></div>
+  <div id="diagnosticDetail"></div>
+  <footer class="diagnostic-footnote">Run snapshot · large previews are shortened.</footer>
+</dialog>
+<dialog id="inputDialog" class="input-dialog" aria-labelledby="inputDialogTitle">
+  <header class="input-dialog-head"><div><h2 id="inputDialogTitle">Edit workflow input</h2><p>Changes are saved as you type.</p></div><button id="closeInputBtn" type="button">Done</button></header>
+  <div id="expandedInputSlot"></div>
+</dialog>
+<dialog id="libraryDialog" class="library-dialog" aria-labelledby="libraryTitle">
+  <header class="library-header"><div><h2 id="libraryTitle">Workflow library</h2><p>Reuse saved flows. Update linked versions when you choose.</p></div><button id="closeLibraryBtn" type="button" aria-label="Close library">×</button></header>
+  <div class="library-content">
+    <section class="library-items"><h3>Saved flows</h3><div id="libraryList"></div></section>
+    <section class="library-save"><h3>Save current canvas</h3>
+      <p id="libraryDraftStatus"></p>
+      <form id="librarySaveForm">
+        <label>Name<input name="name" required maxlength="120"></label>
+        <label>Kind<select name="kind"><option value="subflow">Reusable subflow</option><option value="template">Whole workflow template</option></select></label>
+        <details class="wf-disclosure"><summary>Add a description</summary><label>Description<textarea name="description" rows="3" maxlength="1000" placeholder="Purpose and expected input"></textarea></label></details>
+        <button id="saveLibraryBtn" type="button">Save new item</button>
+        <button id="publishLibraryBtn" type="button" disabled>Publish new version</button>
+      </form>
+    </section>
+  </div>
+  <p id="libraryFeedback" role="status"></p>
+  <p class="library-footnote">Saved in this browser; linked flows travel with JSON exports. Loading a template or draft replaces the canvas. Undo restores it.</p>
+</dialog>
 <script type="module" src="static/nav.js"></script>
 <script type="module" src="static/workflow.js"></script>
 </body>

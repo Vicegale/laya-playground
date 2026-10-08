@@ -1,0 +1,100 @@
+id,from,subject,body
+001,sender001@example.com,Notes from todays meeting,Attached are the notes from our internal team meeting for your reference.
+002,sender002@example.com,Account suspension threat,Your mailbox will be suspended in one hour. Send us your login credentials to keep it active.
+003,sender003@example.com,Shared link gives access denied,A shared document link says access denied for a teammate who already has permission.
+004,sender004@example.com,Demo for the operations team,Could you demonstrate the product to our operations team next Tuesday? We are assessing vendors.
+005,sender005@example.com,Schedule a product demo,Our team is evaluating your product. Could we arrange a demo before deciding to purchase?
+006,sender006@example.com,New calendar integration,Please add an integration with our calendar so events can be synchronized automatically.
+007,sender007@example.com,Community event announcement,The neighborhood community center is hosting an open event on Sunday.
+008,sender008@example.com,Missing invoice PDF,The billing portal does not contain the PDF for our most recent paid invoice.
+009,sender009@example.com,Larger file preview,I would like a full-screen preview mode for uploaded files.
+010,sender010@example.com,Request for version comparison,Could you add a view that compares two versions of the same document?
+011,sender011@example.com,Meeting moved to three oclock,The internal planning meeting has moved to three oclock this afternoon.
+012,sender012@example.com,Office maintenance notice,The office elevator will be unavailable tomorrow morning during scheduled maintenance.
+013,sender013@example.com,Your delivery requires payment,An unexpected parcel is waiting. Enter your card number on our unfamiliar website to release it.
+014,sender014@example.com,Support for offline editing,Please consider adding offline editing so we can work without an internet connection.
+015,sender015@example.com,Compare available plans,We are deciding which paid plan to buy. Could you explain the differences?
+016,sender016@example.com,Get rich without working,Earn ten thousand dollars every day with no skills and no work. Pay to unlock our secret method.
+017,sender017@example.com,Cheap miracle medication,Buy miracle pills from our unlicensed online pharmacy. No prescription is needed.
+018,sender018@example.com,Webhook support requested,Could you add outgoing webhooks for project status changes?
+019,sender019@example.com,Urgent cryptocurrency opportunity,Double your cryptocurrency overnight with our guaranteed secret trading scheme.
+020,sender020@example.com,App crashes at startup,The desktop app closes as soon as I open it after the latest update.
+021,sender021@example.com,Cancel automatic billing,Please disable automatic renewal so our subscription will not be charged again.
+022,sender022@example.com,Fake tax refund notice,A surprise tax refund is ready. Submit your banking password on the linked page to receive it.
+023,sender023@example.com,More export formats,It would be helpful to support exporting reports as Excel workbooks in addition to CSV.
+024,sender024@example.com,Audit log filtering,Please add filters for user and action type to the audit log.
+025,sender025@example.com,Receipt for last payment,Please send me a receipt for the payment collected on October 1.
+026,sender026@example.com,Prorated charge clarification,Please explain the prorated amount charged when we added three users mid-month.
+027,sender027@example.com,Unsolicited bulk advertising list,Purchase millions of scraped email addresses and start sending bulk advertisements today.
+028,sender028@example.com,Book recommendation,I finished the book you recommended and really enjoyed it.
+029,sender029@example.com,Proof of concept request,We are selecting a new vendor and would like a paid proof of concept before a larger purchase.
+030,sender030@example.com,Incorrect tax on invoice,The tax calculation on our latest invoice appears incorrect. Please review it.
+031,sender031@example.com,Browser extension disappeared,The extension icon disappeared after the browser update. How do I restore it?
+032,sender032@example.com,Volume discount inquiry,Do you offer volume discounts for a purchase of one hundred licenses?
+033,sender033@example.com,Custom dashboard colors,I would like to customize the colors of dashboard charts.
+034,sender034@example.com,Secret lottery payout,You won a lottery you never entered. Send a handling fee before we release the winnings.
+035,sender035@example.com,Holiday availability,I will be on annual leave next week and back in the office on Monday.
+036,sender036@example.com,Congratulations on the new role,Congratulations on your promotion. I look forward to working with you in your new role.
+037,sender037@example.com,Saved searches,It would be useful to save and name frequently used search queries.
+038,sender038@example.com,Cannot invite a colleague,Inviting my colleague fails with a permissions error even though I am an administrator.
+039,sender039@example.com,Reseller agreement,We are interested in reselling your product. Can we discuss a commercial partnership?
+040,sender040@example.com,Password reset link expired,The password reset link expires before I can use it. Please help me sign in.
+041,sender041@example.com,Charged twice this month,There are two identical subscription charges on my card this month. Please investigate.
+042,sender042@example.com,Talk to an account executive,I would like to discuss purchasing your platform with an account executive.
+043,sender043@example.com,Notifications arrive twice,Each notification is delivered twice to my account. Can you help diagnose this?
+044,sender044@example.com,Error when opening a project,Opening an existing project displays error 503. The other projects still work.
+045,sender045@example.com,Report times out,The weekly report fails with a timeout despite selecting only a small date range.
+046,sender046@example.com,Please send a VAT invoice,Could you send a VAT invoice for our September subscription payment?
+047,sender047@example.com,Purchase order process,We want to buy your software using a purchase order. What is the process?
+048,sender048@example.com,Additional interface language,Please consider adding a Portuguese translation of the interface.
+049,sender049@example.com,Security review before purchase,We need your security documentation to complete a vendor review before purchasing.
+050,sender050@example.com,Weather changed our plans,"The forecast predicts heavy rain, so we should move our outdoor lunch indoors."
+051,sender051@example.com,Unsolicited casino promotion,Join our unknown online casino now for a huge bonus and guaranteed winnings.
+052,sender052@example.com,Unexpected renewal amount,The renewal invoice is higher than last month. Please explain the additional charge.
+053,sender053@example.com,Mobile sync not working,Changes made on my phone do not appear on the desktop app.
+054,sender054@example.com,Update billing address,Please update the company address that appears on our future invoices.
+055,sender055@example.com,Conditional notifications,Could we configure notifications to fire only when a field matches a rule?
+056,sender056@example.com,Trial before purchasing,Can we try the product for two weeks before purchasing a paid plan?
+057,sender057@example.com,Refund has not arrived,"The refund was approved two weeks ago, but it has not appeared on our bank statement."
+058,sender058@example.com,Inheritance transfer offer,A stranger has left you a large inheritance. Send your bank details and a transfer fee to claim it.
+059,sender059@example.com,Lunch plans for Friday,Would you like to meet for lunch on Friday near the office?
+060,sender060@example.com,Payment marked as overdue,"We paid invoice INV-2407 yesterday, but the account still shows it as overdue."
+061,sender061@example.com,Dashboard stays blank,"After signing in, the dashboard remains blank. Refreshing the page does not help."
+062,sender062@example.com,Invoice in wrong currency,"Our invoice is in dollars, but the agreement specifies euros. Please correct it."
+063,sender063@example.com,Annual plan proposal,Please prepare an annual subscription proposal for our thirty-person team.
+064,sender064@example.com,Integration connection error,Our existing CRM integration stopped connecting yesterday. Please help restore it.
+065,sender065@example.com,Budgetary estimate,Please provide a budgetary estimate for deploying your product across our company.
+066,sender066@example.com,Unable to upload a file,Every document upload stops at 80 percent and shows an error. How can I fix this?
+067,sender067@example.com,Buy thousands of followers,We sell fake social media followers and likes at the lowest prices. Order today.
+068,sender068@example.com,You have won a surprise jackpot,You have been selected for a million-dollar prize. Pay the processing fee now to collect it.
+069,sender069@example.com,Password collection request,This is an unsolicited security check. Reply with every password you use so we can protect you.
+070,sender070@example.com,Support custom fields,Please allow administrators to add custom fields to contact records.
+071,sender071@example.com,Suspicious gift card reward,Claim a free expensive phone by first buying gift cards and sending us the codes.
+072,sender072@example.com,Please confirm the meeting room,Can you confirm which meeting room we booked for the internal workshop?
+073,sender073@example.com,Verify your bank password,Your bank account will be closed today. Reply with your password and card PIN immediately.
+074,sender074@example.com,Thank you for the introduction,Thank you for introducing me to your colleague at the conference.
+075,sender075@example.com,Change the payment card,Our old corporate card has expired. How do we update the subscription payment method?
+076,sender076@example.com,Search results missing,Search no longer finds documents that are still visible in my workspace.
+077,sender077@example.com,Keyboard shortcut for search,Please add a keyboard shortcut that opens global search from any page.
+078,sender078@example.com,Enterprise licensing inquiry,We are considering an enterprise purchase and would like to discuss licensing options.
+079,sender079@example.com,Updated office seating plan,The new office seating plan is available on the shared internal drive.
+080,sender080@example.com,Credit note requested,Please issue a credit note for the seats removed from our account last week.
+081,sender081@example.com,Licensing for a nonprofit,Our nonprofit is considering buying the product. Do you have a nonprofit pricing plan?
+082,sender082@example.com,Add dark mode,Could you add a dark mode option to the web application?
+083,sender083@example.com,Two-factor code rejected,My authenticator code is rejected even though the device clock is correct.
+084,sender084@example.com,Request for reusable templates,Please add reusable project templates that can be shared with the whole team.
+085,sender085@example.com,Guaranteed investment returns,Our exclusive investment promises a guaranteed 500 percent return every week.
+086,sender086@example.com,Saved settings keep reverting,My saved notification settings revert to the defaults each time I log in.
+087,sender087@example.com,Request for scheduled exports,It would be useful to schedule automatic CSV exports every Monday.
+088,sender088@example.com,Team picnic reminder,Remember to bring a picnic lunch to the team outing this Saturday.
+089,sender089@example.com,Happy birthday,Wishing you a wonderful birthday and a lovely day with your family.
+090,sender090@example.com,Procurement contact requested,Our procurement team would like to speak with your sales representative about a new contract.
+091,sender091@example.com,Annual payment was declined,Our annual subscription payment was declined. Can you retry it with the updated card?
+092,sender092@example.com,Travel itinerary,Here is the itinerary for our trip next month. Please check the departure time.
+093,sender093@example.com,Account locked after login attempts,My account is locked after several failed attempts. I need help recovering access.
+094,sender094@example.com,Quote for twenty seats,Please send a quote for twenty users on an annual business subscription.
+095,sender095@example.com,Refund for canceled subscription,I canceled before renewal but was still charged. I would like a refund.
+096,sender096@example.com,Bank transfer reference,Which payment reference should we include when paying invoice INV-2410 by bank transfer?
+097,sender097@example.com,Bulk rename projects,Could the product include a bulk action for renaming multiple projects?
+098,sender098@example.com,Export button is broken,Clicking Export produces an empty file instead of the report data.
+099,sender099@example.com,Pricing for a small team,What would a subscription cost for a team of five people?
