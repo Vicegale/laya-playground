@@ -30,6 +30,8 @@
       <option value="branch">Semantic branch + exact rule</option>
       <option value="collections">Filter and map a list</option>
       <option value="csv">Tag CSV rows</option>
+      <option value="review-fanout">Tag reviews with fan-out</option>
+      <option value="clean-csv">Clean CSV columns</option>
       <option value="switch">Route by email type</option>
       <option value="groups">Group emails and export</option>
       <option value="keyed-groups">Export other emails</option>
@@ -85,6 +87,11 @@
 <dialog id="inputDialog" class="input-dialog" aria-labelledby="inputDialogTitle">
   <header class="input-dialog-head"><div><h2 id="inputDialogTitle">Edit workflow input</h2><p>Changes are saved as you type.</p></div><button id="closeInputBtn" type="button">Done</button></header>
   <div id="expandedInputSlot"></div>
+</dialog>
+<dialog id="fieldPickerDialog" class="field-picker-dialog" aria-labelledby="fieldPickerTitle">
+  <header class="diagnostic-header"><div><h2 id="fieldPickerTitle">Choose a field</h2><p id="fieldPickerContext"></p></div><button id="closeFieldPickerBtn" type="button" aria-label="Close field picker">×</button></header>
+  <div class="field-picker-content"><input id="fieldPickerSearch" type="search" aria-label="Search fields" placeholder="Search fields…"><div id="fieldPickerList"></div></div>
+  <footer class="diagnostic-footnote">Configured fields may be conditional. Samples come from input, CSV previews or the selected execution.</footer>
 </dialog>
 <dialog id="libraryDialog" class="library-dialog" aria-labelledby="libraryTitle">
   <header class="library-header"><div><h2 id="libraryTitle">Workflow library</h2><p>Reuse saved flows. Update linked versions when you choose.</p></div><button id="closeLibraryBtn" type="button" aria-label="Close library">×</button></header>

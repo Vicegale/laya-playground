@@ -1,0 +1,279 @@
+{
+  "inputText": "{}",
+  "runInput": {},
+  "workflow": {
+    "edges": [
+      {
+        "from": "csv-unyqkp",
+        "fromPort": "next",
+        "id": "edge-xyyy6k",
+        "to": "map-fvson6"
+      },
+      {
+        "from": "map-fvson6",
+        "fromPort": "done",
+        "id": "edge-36rwhi",
+        "to": "csv-output-6ahbf0"
+      }
+    ],
+    "name": "Tag reviews with fan-out",
+    "nodes": [
+      {
+        "config": {
+          "content": "review_id,product,channel,review_text\n001,Wireless headphones,store website,The noise cancellation makes my train commute much quieter. I can finally hear podcasts without turning the volume up.\n002,Everyday backpack,in-store survey,\"My laptop, lunch and gym clothes all fit without making the bag look enormous.\"\n003,Insulated water bottle,mobile app,Ice was still in the bottle after a whole afternoon at the beach. The insulation really works.\n004,Adjustable desk lamp,marketplace,The adjustable arm lets me light my notebook without shining directly into my eyes.\n005,Electric coffee grinder,store website,The grind is consistent enough for my pour-over coffee and the grounds cup is easy to remove.\n006,Wireless headphones,store website,The left earcup stopped producing sound after three days. Restarting and pairing again did not help.\n007,Everyday backpack,in-store survey,The zipper separated on the first morning. I could not close the main compartment on the way to work.\n008,Insulated water bottle,mobile app,Water leaks around the cap even when it is tightened. My work bag was soaked.\n009,Adjustable desk lamp,marketplace,The lamp flickers at the lowest brightness setting and gives me a headache when reading.\n010,Electric coffee grinder,store website,The motor stopped on the second use. It will not start even with a full hopper and a properly fitted lid.\n011,Wireless headphones,store website,\"They sound excellent, but the headband gets uncomfortable after an hour.\"\n012,Everyday backpack,in-store survey,\"The padded straps are comfortable, but the laptop sleeve is too tight for my 16-inch computer.\"\n013,Insulated water bottle,mobile app,\"The bottle keeps drinks cold, but it is too wide for the cup holder in my car.\"\n014,Adjustable desk lamp,marketplace,Assembly was simple and the base feels stable. The supplied cable is too short for my desk.\n015,Electric coffee grinder,store website,\"Coffee tastes much fresher now, although the grinder is louder than I expected.\"\n016,Wireless headphones,store website,Battery life easily covers a full workday and the quick charge is handy before meetings.\n017,Everyday backpack,in-store survey,It kept my notebooks dry through a short shower. I have not tested it in heavy rain.\n018,Insulated water bottle,mobile app,Easy to clean because the opening is wide enough for a brush. No lingering coffee smell either.\n019,Adjustable desk lamp,marketplace,The warm light setting is comfortable for evening reading and the dimmer is easy to use.\n020,Electric coffee grinder,store website,The numbered settings make it easy to repeat the same grind size each morning.\n021,Wireless headphones,store website,The box arrived crushed and the charging cable was missing.\n022,Everyday backpack,in-store survey,The color in person is much darker than the photos. The bag itself seems well made.\n023,Insulated water bottle,mobile app,It arrived with a large dent and chipped paint. The shipping box was undamaged.\n024,Adjustable desk lamp,marketplace,The package contained the lamp but no power adapter. I could not use it out of the box.\n025,Electric coffee grinder,store website,The product arrived with used coffee grounds inside. I paid for a new appliance.\n026,Wireless headphones,store website,Setup took less than a minute. Switching between my laptop and phone is straightforward.\n027,Everyday backpack,in-store survey,A bargain for a daily commuting bag. The stitching and fabric feel better than the price suggests.\n028,Insulated water bottle,mobile app,\"The cap squeaks every time I open it. A small issue, but annoying during quiet meetings.\"\n029,Adjustable desk lamp,marketplace,The touch button responds inconsistently. Sometimes I need to tap it four or five times.\n030,Electric coffee grinder,store website,Cleaning the burrs is straightforward and the little brush reaches the corners well.\n031,Wireless headphones,store website,They are fine for calls. I cannot tell much difference from my cheaper pair.\n032,Everyday backpack,in-store survey,\"The parcel arrived on time, but the warehouse sent the wrong size.\"\n033,Insulated water bottle,mobile app,I ordered the blue bottle and received a green one. Please check orders more carefully.\n034,Adjustable desk lamp,marketplace,This is much brighter than my old lamp and takes up less desk space.\n035,Electric coffee grinder,store website,The finest setting is still too coarse for my espresso machine. The listing made that use sound possible.\n036,Wireless headphones,store website,The microphone picks up every keyboard tap during video calls. My colleagues keep asking me to mute.\n037,Everyday backpack,in-store survey,I like the separate shoe pocket because it keeps muddy trainers away from clean clothes.\n038,Insulated water bottle,mobile app,I appreciate that a spare seal was included. The first seal is still working after three months.\n039,Adjustable desk lamp,marketplace,The advertised USB charging port charges my phone very slowly.\n040,Electric coffee grinder,store website,For the price it is a useful upgrade from my old blade grinder.\n041,Wireless headphones,store website,I bought them on sale and feel they were worth the money. I would hesitate at the regular price.\n042,Everyday backpack,in-store survey,The shoulder strap stitching started coming loose after two weeks of carrying only a laptop.\n043,Insulated water bottle,mobile app,The printed capacity is accurate. It holds the amount I expected.\n044,Adjustable desk lamp,marketplace,A timer that turns the light off after an hour would be useful for bedtime reading.\n045,Electric coffee grinder,store website,Ground coffee clings to the cup and scatters over the counter when I remove it.\n046,Wireless headphones,store website,Customer service sent a replacement ear cushion immediately and did not make me return the whole headset.\n047,Everyday backpack,in-store survey,Could you add an exterior water bottle pocket? The internal one takes up useful space.\n048,Insulated water bottle,mobile app,\"The paint began peeling after hand washing, despite following the care instructions.\"\n049,Adjustable desk lamp,marketplace,\"The finish looks attractive, but I think the price is high for the materials used.\"\n050,Electric coffee grinder,store website,Could the next version include a removable hopper so I can change beans more easily?\n051,Wireless headphones,store website,Please add a way to disable the touch controls. I keep pausing music when adjusting the headphones.\n052,Everyday backpack,in-store survey,The return label was easy to get and the replacement arrived before my trip.\n053,Insulated water bottle,mobile app,A carrying loop would make this much easier to take on hikes.\n054,Adjustable desk lamp,marketplace,I contacted support about the missing adapter and they dispatched one the same day.\n055,Electric coffee grinder,store website,Support explained how to clear a blockage and stayed on the chat until the grinder worked again.\n056,Wireless headphones,store website,\"The delivery estimate was two days, but they took almost two weeks to arrive.\"\n057,Everyday backpack,in-store survey,The bag is exactly the listed dimensions. It fits under the airline seat I usually use.\n058,Insulated water bottle,mobile app,\"It is more expensive than similar bottles, and I have not noticed any extra benefit.\"\n059,Adjustable desk lamp,marketplace,The clamp version fits my narrow desk perfectly. I like having the base area free.\n060,Electric coffee grinder,store website,\"It arrived four days after the promised date, but the appliance was in perfect condition.\"\n061,Wireless headphones,store website,Great bass without drowning out voices. These have become my everyday headphones.\n062,Everyday backpack,in-store survey,\"The mesh back panel helps a little, but I still get very sweaty on my cycle commute.\"\n063,Insulated water bottle,mobile app,The replacement lid solved the leak and customer service was helpful throughout.\n064,Adjustable desk lamp,marketplace,The arm slowly sinks down after I adjust it. Tightening the screw only helped for a day.\n065,Electric coffee grinder,store website,The hopper lid does not seal well and the beans lose their aroma if left overnight.\n066,Wireless headphones,store website,\"Bluetooth drops out whenever I put my phone in my jacket pocket, even when the battery is full.\"\n067,Everyday backpack,in-store survey,Several compartments are so small that I cannot figure out what to put in them.\n068,Insulated water bottle,mobile app,Hot tea stays warm until lunchtime without making the outside uncomfortable to hold.\n069,Adjustable desk lamp,marketplace,The brightness levels are evenly spaced and it remembers my last setting when switched on.\n070,Electric coffee grinder,store website,I grind only enough for one cup. The small footprint suits my kitchen.\n071,Wireless headphones,store website,The case is compact and easy to pack. The headphones themselves are heavier than I expected.\n072,Everyday backpack,in-store survey,Looks smart enough for the office and handles weekend walks well. I have already recommended it to a friend.\n073,Insulated water bottle,mobile app,The lid has several little grooves that are hard to wash. I worry about residue building up.\n074,Adjustable desk lamp,marketplace,\"Delivery was early, the parts were well protected and every piece was included.\"\n075,Electric coffee grinder,store website,The measuring scoop was missing and the manual refers to buttons that are not on this model.\n076,Wireless headphones,store website,I returned them because the volume was too low for my needs. The refund arrived promptly.\n077,Everyday backpack,in-store survey,The listing described reinforced padding. The bottom has almost no cushioning for a laptop.\n078,Insulated water bottle,mobile app,Good size for a child school bag. The metal body is heavier than a plastic bottle.\n079,Adjustable desk lamp,marketplace,The lamp makes a faint buzzing sound on the cool light setting. I can hear it in a quiet room.\n080,Electric coffee grinder,store website,It produces a fairly even grind. I have not tried all the settings yet.\n081,Wireless headphones,store website,\"The instructions say \"\"hold for three seconds,\"\" but the button needs a much longer press to pair.\"\n082,Everyday backpack,in-store survey,After six months the fabric still looks new. The zipper pulls have lost some paint.\n083,Insulated water bottle,mobile app,\"The bottle works well, but the order tracking link never updated and delivery took longer than promised.\"\n084,Adjustable desk lamp,marketplace,Please offer replacement bulbs separately instead of requiring a whole new lamp.\n085,Electric coffee grinder,store website,The plastic catch cup feels flimsy compared with the sturdy metal body.\n086,Wireless headphones,store website,\"They do what the listing promises. Nothing particularly exciting, nothing wrong so far.\"\n087,Everyday backpack,in-store survey,Support asked for the same photos three times and still has not approved my repair request.\n088,Insulated water bottle,mobile app,\"The straw attachment does not reach the bottom, so the last few sips are difficult to drink.\"\n089,Adjustable desk lamp,marketplace,It lights the desk as expected. I mostly leave it on the middle setting.\n090,Electric coffee grinder,store website,The replacement unit has worked reliably for three months. The warranty process was slow but eventually helpful.\n091,Wireless headphones,store website,The plastic hinge cracked during normal use after one month. I expected better durability at this price.\n092,Everyday backpack,in-store survey,I would pay a little more for a brighter lining. Finding small items inside the black interior is difficult.\n093,Insulated water bottle,mobile app,I dropped it on a tiled floor and it survived with only a small scratch.\n094,Adjustable desk lamp,marketplace,\"The listing says the arm rotates fully, but mine stops halfway and cannot point behind the base.\"\n095,Electric coffee grinder,store website,An automatic shutoff after a selected weight would save me from measuring every batch separately.\n096,Wireless headphones,store website,The app requires an account just to change equalizer settings. I would prefer basic controls without signing in.\n097,Everyday backpack,in-store survey,It is a basic backpack with reasonable storage. For occasional use it meets my needs.\n098,Insulated water bottle,mobile app,\"Nothing fancy. It holds water and the lid closes securely, which is all I needed.\"\n099,Adjustable desk lamp,marketplace,I like the design and the light quality. Returning the first faulty unit was more complicated than it should have been.\n100,Electric coffee grinder,store website,\"I enjoy the coffee it makes possible, but I would not buy it again unless the mess and noise were improved.\"\n",
+          "delimiter": "auto",
+          "filename": "product-reviews.csv",
+          "mode": "file",
+          "resultAs": "rows"
+        },
+        "id": "csv-unyqkp",
+        "label": "Read CSV",
+        "position": {
+          "x": 50,
+          "y": 140
+        },
+        "type": "csv"
+      },
+      {
+        "config": {
+          "format": "value",
+          "keepOriginal": true,
+          "mode": "workflow",
+          "resultAs": "tagged",
+          "source": "{{rows}}",
+          "value": "{{item}}",
+          "workflow": {
+            "edges": [
+              {
+                "from": "input-mqj9gx",
+                "fromPort": "next",
+                "id": "edge-6oeisi",
+                "to": "decision-sx5y1v"
+              },
+              {
+                "from": "decision-sx5y1v",
+                "fromPort": "positive",
+                "id": "edge-qwu35r",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-sx5y1v",
+                "fromPort": "negative",
+                "id": "edge-4hv9me",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-sx5y1v",
+                "fromPort": "mixed",
+                "id": "edge-7697rk",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-sx5y1v",
+                "fromPort": "neutral",
+                "id": "edge-55iboe",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "input-mqj9gx",
+                "fromPort": "next",
+                "id": "edge-nahrhz",
+                "to": "decision-jwekv4"
+              },
+              {
+                "from": "decision-jwekv4",
+                "fromPort": "quality",
+                "id": "edge-y5h3vu",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-jwekv4",
+                "fromPort": "usability",
+                "id": "edge-286jh8",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-jwekv4",
+                "fromPort": "value",
+                "id": "edge-qigqj0",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-jwekv4",
+                "fromPort": "delivery",
+                "id": "edge-sp4st5",
+                "to": "output-0ot3xo"
+              },
+              {
+                "from": "decision-jwekv4",
+                "fromPort": "other",
+                "id": "edge-ltshc8",
+                "to": "output-0ot3xo"
+              }
+            ],
+            "name": "Tag review",
+            "nodes": [
+              {
+                "config": {},
+                "id": "input-mqj9gx",
+                "label": "Review",
+                "position": {
+                  "x": 50,
+                  "y": 190
+                },
+                "type": "input"
+              },
+              {
+                "config": {
+                  "decisionType": "choice",
+                  "falseCriterion": "",
+                  "key": "sentiment",
+                  "options": [
+                    {
+                      "description": "The reviewer is satisfied.",
+                      "key": "positive",
+                      "label": "Positive"
+                    },
+                    {
+                      "description": "The reviewer is dissatisfied.",
+                      "key": "negative",
+                      "label": "Negative"
+                    },
+                    {
+                      "description": "The review expresses both satisfaction and dissatisfaction.",
+                      "key": "mixed",
+                      "label": "Mixed"
+                    },
+                    {
+                      "description": "The review expresses no clear sentiment.",
+                      "key": "neutral",
+                      "label": "Neutral"
+                    }
+                  ],
+                  "question": "What is the overall sentiment of this product review?",
+                  "resultAs": "",
+                  "state": "{{item.review_text}}",
+                  "threshold": 0.5,
+                  "trueCriterion": ""
+                },
+                "id": "decision-sx5y1v",
+                "label": "Sentiment",
+                "position": {
+                  "x": 310,
+                  "y": 30
+                },
+                "type": "decision"
+              },
+              {
+                "config": {
+                  "decisionType": "choice",
+                  "falseCriterion": "",
+                  "key": "topic",
+                  "options": [
+                    {
+                      "description": "Durability, defects or product performance.",
+                      "key": "quality",
+                      "label": "Quality"
+                    },
+                    {
+                      "description": "Comfort or ease of use.",
+                      "key": "usability",
+                      "label": "Usability"
+                    },
+                    {
+                      "description": "Price or value for money.",
+                      "key": "value",
+                      "label": "Value"
+                    },
+                    {
+                      "description": "Shipping, arrival or packaging.",
+                      "key": "delivery",
+                      "label": "Delivery"
+                    },
+                    {
+                      "description": "Another topic.",
+                      "key": "other",
+                      "label": "Other"
+                    }
+                  ],
+                  "question": "What is the main topic of this product review?",
+                  "resultAs": "",
+                  "state": "{{item.review_text}}",
+                  "threshold": 0.5,
+                  "trueCriterion": ""
+                },
+                "id": "decision-jwekv4",
+                "label": "Topic",
+                "position": {
+                  "x": 310,
+                  "y": 330
+                },
+                "type": "decision"
+              },
+              {
+                "config": {
+                  "columns": [
+                    {
+                      "name": "sentiment",
+                      "transform": "none",
+                      "value": "{{decisions.sentiment.choice}}"
+                    },
+                    {
+                      "name": "sentiment_confidence",
+                      "transform": "none",
+                      "value": "{{decisions.sentiment.confidence}}"
+                    },
+                    {
+                      "name": "topic",
+                      "transform": "none",
+                      "value": "{{decisions.topic.choice}}"
+                    },
+                    {
+                      "name": "topic_confidence",
+                      "transform": "none",
+                      "value": "{{decisions.topic.confidence}}"
+                    }
+                  ],
+                  "format": "fields",
+                  "value": "{{input}}"
+                },
+                "id": "output-0ot3xo",
+                "label": "Combine tags",
+                "position": {
+                  "x": 630,
+                  "y": 190
+                },
+                "type": "output"
+              }
+            ],
+            "version": 1
+          }
+        },
+        "id": "map-fvson6",
+        "label": "Tag each row",
+        "position": {
+          "x": 340,
+          "y": 140
+        },
+        "type": "map"
+      },
+      {
+        "config": {
+          "bom": true,
+          "columns": "{{rowsCsv.columns}}",
+          "delimiter": ",",
+          "filename": "tagged-reviews.csv",
+          "source": "{{tagged}}"
+        },
+        "id": "csv-output-6ahbf0",
+        "label": "Tagged reviews CSV",
+        "position": {
+          "x": 680,
+          "y": 140
+        },
+        "type": "csv-output"
+      }
+    ],
+    "version": 1
+  }
+}

@@ -6,6 +6,33 @@ For Each, Subflow and nested Map/Filter bodies appear inside their parent cards.
 Use **Show body / Hide body**, or double-click a container, to toggle its preview.
 Use **Edit body** to open its own canvas; breadcrumbs return to the caller.
 
+## Branches and joins
+
+Connect one output port to several nodes to run every connected branch. Decision,
+Condition and Switch still choose one port; all connections on that chosen port
+run. Branches execute in a deterministic order, one step at a time.
+
+Sibling branches start with separate variable scopes. A shared downstream node
+waits for the active branches and runs once with their combined fields. Unselected
+conditional paths do not block it. Use different result names for independent
+classifications. If siblings assign conflicting values to the same field, the
+join fails with the field and both node names; connect those steps in sequence
+if the later value should replace the earlier one.
+
+Output and CSV Output finish their own branch. Several terminal nodes retain
+all results and CSV downloads; **Outputs (N)** opens a picker for their node
+results. A single terminal keeps its existing result shape. In the runtime API,
+multiple terminals return an array in `output`, plus `outputs` records identifying
+each node and its value. Map and Filter bodies require exactly one final Output
+per item: join independent classifiers at a shared Output to combine their fields.
+Reachable cycles fail with a diagnostic; use For Each, Map or Filter for repetition.
+
+Try **Examples → Tag reviews with fan-out** for two classifications per review.
+The nested Input connects to Sentiment and Topic, and both connect to Combine tags.
+Map keeps the original fields and CSV Output adds both labels and confidences.
+An importable version with 100 reviews is in
+[`examples/workflows/product-reviews-fanout.json`](../examples/workflows/product-reviews-fanout.json).
+
 ## Editing
 
 The palette groups nodes into **Data**, **Logic**, **Lists** and **Reuse**.
@@ -56,6 +83,54 @@ containers without changing the saved node positions. Expansion is a view
 setting and does not create undo entries. Deeper containers start collapsed;
 large previews stop at 240 visible nodes and eight expansion levels. Open a
 body's editor to inspect more of a large workflow.
+
+## Field picker and column mapping
+
+Click **{}** beside a reference field to choose from input, item fields,
+variables and earlier decisions. Search by path or type. Selection replaces an
+exact reference, or inserts at the text cursor; condition fields use bare paths.
+Manual references remain editable, including bracket paths for CSV headers
+containing spaces or dots.
+
+The picker follows reachable predecessors and the current nested scope.
+A Decision inside a Map body appears only after that Decision in the body,
+not at the parent Map's input. For Each respects custom item/index names and
+resets decisions; Subflow starts a fresh decision scope. Fields introduced on
+only some incoming branches are marked **conditional**.
+
+Names and types come from input samples, CSV headers, node settings and known
+JSON/column projections. **Configured / Not run yet** means the shape is known
+but the value has not been captured. Input and CSV samples are labelled as such;
+model values are shown only from **Last run**, using the selected item. Changes
+after execution are labelled **edited since run**. Dynamic object keys (including
+Group By's encountered groups) become available after a run. Truncated or missing
+trace samples are unavailable rather than treated as real values. The picker
+bounds nesting, sample fields and the catalog to keep large data responsive;
+other paths can still be entered manually.
+
+Choose **Map → Inline mapping or value → Column mapping** to build a row without
+writing JSON. Each card has an output column, a value/reference and a transform:
+As is, Trim, Trim + lowercase/uppercase, To number, To boolean, or Round to 2
+decimals. **Keep original fields** preserves other columns; matching output names
+replace their values. The preview applies transforms to known samples and
+leaves unavailable values as **Not run yet**. It does not run inference.
+Try **Examples → Clean CSV columns** for a complete CSV → Map → CSV Output flow.
+
+For model-derived columns, choose **Output → Column mapping** after the Decision
+inside a nested Map body. **Examples → Tag CSV rows** returns `category` from
+`{{decisions.category.choice}}` and `confidence` from
+`{{decisions.category.confidence}}`; the parent Map adds both to each original row.
+Existing Value and JSON template workflows keep their behavior.
+
+Column names must be nonempty and unique. Text cleanup requires text; numeric
+conversion rejects blank/nonfinite values, and boolean conversion accepts only
+booleans or the text `true`/`false`. As is preserves original types. Missing
+fields and invalid conversions fail with the column name and item location in
+diagnostics. Column edits, insertion/removal and format changes support undo,
+autosave, portable JSON and library versions.
+
+Run `node tools/test_workflow_fields.mjs` for scope/branch inference, honest
+samples, selected execution data, transformations and enriched CSV exports.
 
 ## Switch
 
@@ -163,7 +238,7 @@ the `done` port to the next node. A later node can use `{{mapped}}` or
 `{{filtered}}` as its collection. Try **Examples → Filter and map a list**:
 it keeps active items and returns their names, `["Ada", "Cleo"]`.
 
-- **Map → Inline value** returns one transformed value for
+- **Map → Inline mapping or value** returns one transformed value for
   every item. `{{item.name}}` extracts a field without changing its type.
   Mixed templates produce text; JSON templates can build objects such as
   `{"name": {{item.name}}, "position": {{index}}}`. Missing exact values fail
@@ -225,8 +300,9 @@ Laya results.
    as a Map or For Each collection. CSV has a `next` port and can start the flow
    directly or follow another node.
 3. In a nested Map, use `{{item.text}}` as Decision State and connect every
-   decision branch to an Output with JSON such as
-   `{"category": {{decisions.category.choice}}, "confidence": {{decisions.category.confidence}}}`.
+   decision branch to **Output → Column mapping**. Add `category` with
+   `{{decisions.category.choice}}` and `confidence` with
+   `{{decisions.category.confidence}}`. JSON templates also remain available.
    Enable **Keep original fields** on Map and store the list as `tagged`.
    Columns containing dots or spaces can use bracket references such as
    `{{item["customer.name"]}}` or `{{item["Message text"]}}`.

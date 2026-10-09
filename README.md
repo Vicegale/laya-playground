@@ -23,7 +23,7 @@ You get the whole site, live:
 - `/#snake` classic Snake: Laya chooses a direction from the current state, or you steer with arrow keys, WASD or on-screen arrows
 - `/#checkpoint` the document inspection desk: compare permits, travel declarations and employer letters, with live Laya readings or human stamping
 - `/playground` the editor: write some text and a few typed questions, see every answer with its probabilities, compare all three checkpoints
-- `/workflow.html` the visual workflow editor: connect decisions, switches, exact rules, maps, filters, grouping, CSV files, loops and nested subflows, with undo/redo, node duplication, linked library versions and saved templates; see [editing controls](docs/workflow-editor.md)
+- `/workflow.html` the visual workflow editor: connect decisions, switches, exact rules, maps, filters, grouping, CSV files, loops and nested subflows, with fan-out branches and joins, scoped field picking, column cleanup/mapping, undo/redo, node duplication, linked library versions and saved templates; see [editing controls](docs/workflow-editor.md)
 - `/about` why this exists
 
 The web server itself is the Python standard library and binds to loopback, so nothing is reachable from your network. The only dependency is `laya`.

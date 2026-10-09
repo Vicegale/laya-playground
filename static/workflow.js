@@ -5,6 +5,9 @@ import { createTraceUI } from './workflow-trace-ui.js';
 import { locateStep } from './workflow-diagnostics.js';
 import { canvasLayout, hasBody, nodeKey } from './workflow-canvas-model.js';
 import { parseCSV } from './workflow-csv.js';
+import { fieldCatalog } from './workflow-field-schema.js';
+import { createFieldPicker } from './workflow-field-picker.js';
+import { FIELD_TRANSFORMS, transformField } from './workflow-fields.js';
 
 const { Graph } = window.X6 || {};
 if (!Graph) throw new Error('AntV X6 failed to load.');
@@ -212,7 +215,7 @@ function csvTaggingExample() {
     { key: 'other', label: 'Other', description: 'Another topic.' },
   ] });
   const output = makeNode('output', 590, 140); output.label = 'New columns';
-  Object.assign(output.config, { format: 'json', value: '{"category": {{decisions.category.choice}}, "confidence": {{decisions.category.confidence}}}' });
+  Object.assign(output.config, { format: 'fields', columns: [{ name: 'category', value: '{{decisions.category.choice}}', transform: 'none' }, { name: 'confidence', value: '{{decisions.category.confidence}}', transform: 'none' }] });
   body.nodes = [input, decision, output];
   body.edges = [{ id: uid('edge'), from: input.id, fromPort: 'next', to: decision.id }, ...decision.config.options.map(o => ({ id: uid('edge'), from: decision.id, fromPort: o.key, to: output.id }))];
   map.config.workflow = body;
@@ -222,7 +225,60 @@ function csvTaggingExample() {
   return { workflow: root, input: {} };
 }
 
-const EXAMPLES = { list: listClassifierExample, branch: branchExample, collections: mapFilterExample, csv: csvTaggingExample, switch: switchExample, groups: groupEmailsExample, 'keyed-groups': keyedGroupsExample };
+function reviewFanoutExample() {
+  const example = csvTaggingExample(); const [csv, map, download] = example.workflow.nodes;
+  example.workflow.name = 'Tag reviews with fan-out';
+  csv.config.filename = 'product-reviews.csv';
+  csv.config.content = 'review_id,product,channel,review_text\r\n001,Headphones,Website,"Great sound and comfortable all day."\r\n002,Backpack,Marketplace,"The zip broke after a week."\r\n003,Water bottle,Email,"Nice bottle but delivery took too long."\r\n';
+  const body = map.config.workflow; body.name = 'Tag review';
+  const [input, sentiment, output] = body.nodes;
+  input.label = 'Review'; input.position = { x: 50, y: 190 };
+  sentiment.label = 'Sentiment'; sentiment.position = { x: 310, y: 30 };
+  Object.assign(sentiment.config, { key: 'sentiment', state: '{{item.review_text}}', question: 'What is the overall sentiment of this product review?', options: [
+    { key: 'positive', label: 'Positive', description: 'The reviewer is satisfied.' },
+    { key: 'negative', label: 'Negative', description: 'The reviewer is dissatisfied.' },
+    { key: 'mixed', label: 'Mixed', description: 'The review expresses both satisfaction and dissatisfaction.' },
+    { key: 'neutral', label: 'Neutral', description: 'The review expresses no clear sentiment.' },
+  ] });
+  const topic = makeNode('decision', 310, 330); topic.label = 'Topic';
+  Object.assign(topic.config, { key: 'topic', state: '{{item.review_text}}', question: 'What is the main topic of this product review?', options: [
+    { key: 'quality', label: 'Quality', description: 'Durability, defects or product performance.' },
+    { key: 'usability', label: 'Usability', description: 'Comfort or ease of use.' },
+    { key: 'value', label: 'Value', description: 'Price or value for money.' },
+    { key: 'delivery', label: 'Delivery', description: 'Shipping, arrival or packaging.' },
+    { key: 'other', label: 'Other', description: 'Another topic.' },
+  ] });
+  output.position = { x: 630, y: 190 }; output.label = 'Combine tags';
+  output.config.columns = ['sentiment', 'topic'].flatMap(key => [
+    { name: key, value: `{{decisions.${key}.choice}}`, transform: 'none' },
+    { name: `${key}_confidence`, value: `{{decisions.${key}.confidence}}`, transform: 'none' },
+  ]);
+  body.nodes = [input, sentiment, topic, output];
+  body.edges = [sentiment, topic].flatMap(decision => [
+    { id: uid('edge'), from: input.id, fromPort: 'next', to: decision.id },
+    ...decision.config.options.map(o => ({ id: uid('edge'), from: decision.id, fromPort: o.key, to: output.id })),
+  ]);
+  download.config.filename = 'tagged-reviews.csv'; download.label = 'Tagged reviews CSV';
+  return example;
+}
+
+function cleanCSVExample() {
+  const root = emptyWorkflow(); root.name = 'Clean CSV columns';
+  const csv = makeNode('csv', 50, 140); csv.label = 'Read CSV';
+  Object.assign(csv.config, { filename: 'contacts.csv', content: 'id,email,score,active\r\n001, Ada@Example.COM ,0.94132,true\r\n002, BEN@example.com ,0.87321,false\r\n003, cleo@example.com ,0.98271,true\r\n' });
+  const map = makeNode('map', 340, 140); map.label = 'Clean columns';
+  Object.assign(map.config, { source: '{{rows}}', resultAs: 'cleaned', mode: 'value', format: 'fields', keepOriginal: true, columns: [
+    { name: 'email', value: '{{item.email}}', transform: 'lower' },
+    { name: 'score', value: '{{item.score}}', transform: 'round' },
+    { name: 'active', value: '{{item.active}}', transform: 'boolean' },
+  ] });
+  const out = makeNode('csv-output', 680, 140); out.label = 'Clean CSV';
+  Object.assign(out.config, { source: '{{cleaned}}', filename: 'cleaned.csv' });
+  root.nodes = [csv, map, out]; root.edges = [{ id: uid('edge'), from: csv.id, fromPort: 'next', to: map.id }, { id: uid('edge'), from: map.id, fromPort: 'done', to: out.id }];
+  return { workflow: root, input: {} };
+}
+
+const EXAMPLES = { list: listClassifierExample, branch: branchExample, collections: mapFilterExample, csv: csvTaggingExample, 'clean-csv': cleanCSVExample, 'review-fanout': reviewFanoutExample, switch: switchExample, groups: groupEmailsExample, 'keyed-groups': keyedGroupsExample };
 let workflow = clone(listClassifierExample().workflow);
 let runInput = clone(listClassifierExample().input);
 let stack = [{ workflow, label: workflow.name }];
@@ -235,6 +291,7 @@ let running = false;
 let history;
 let libraryUI;
 let traceUI;
+let fieldPicker;
 let restoredInputText = null;
 let lastInputText = null;
 let canvasRecords = { nodes: [], edges: [] };
@@ -330,12 +387,12 @@ function nodeMeta(node) {
   if (node.type === 'switch') return `${node.config.cases?.length || 0} cases + default`;
   if (node.type === 'condition') return `${node.config.conditions?.length || 0} condition(s)`;
   if (node.type === 'foreach') return `for each ${node.config.itemVar || 'item'}`;
-  if (node.type === 'map') return node.config.mode === 'workflow' ? 'map · nested body' : 'map · value template';
+  if (node.type === 'map') return node.config.mode === 'workflow' ? 'map · nested body' : node.config.format === 'fields' ? `map · ${node.config.columns?.length || 0} columns` : 'map · value template';
   if (node.type === 'filter') return node.config.mode === 'workflow' ? 'filter · nested predicate' : `${node.config.conditions?.length || 0} filter rule(s)`;
   if (node.type === 'groupby') return node.config.outputFormat === 'keyed' ? 'groups by name' : 'group list by key';
   if (node.type === 'subflow') return node.config.libraryRef ? `linked · v${node.config.libraryRef.version}` : 'nested workflow';
   if (node.type === 'set') return `${node.config.assignments?.length || 0} assignment(s)`;
-  if (node.type === 'output') return 'terminal';
+  if (node.type === 'output') return node.config.format === 'fields' ? `${node.config.columns?.length || 0} output columns` : 'terminal';
   if (node.type === 'csv-output') return 'download CSV';
   if (node.type === 'csv') return node.config.filename || 'load CSV rows';
   return 'workflow input';
@@ -560,6 +617,38 @@ function switchRows(node) {
   </div>`).join('');
 }
 
+function valueFormat(node) {
+  const format = node.config.format || 'value';
+  return `<select data-field="format"><option value="value" ${format === 'value' ? 'selected' : ''}>Value or text</option><option value="fields" ${format === 'fields' ? 'selected' : ''}>Column mapping</option><option value="json" ${format === 'json' ? 'selected' : ''}>JSON template</option></select>`;
+}
+function columnRows(node) {
+  const rows = (Array.isArray(node.config.columns) ? node.config.columns : []).map((c, i) => `<div class="column-row" data-index="${i}">
+    <div class="column-row-head"><label>Output column<input data-mapping="name" value="${esc(c.name)}" placeholder="email_type" aria-label="Column ${i + 1} name"></label><button type="button" class="icon-btn danger" data-remove-column="${i}" aria-label="Remove column ${i + 1}">×</button></div>
+    <label>Value<input data-mapping="value" value="${esc(c.value)}" placeholder="Choose a field or enter a value" aria-label="Column ${i + 1} value"></label>
+    <label>Transform<select data-mapping="transform" aria-label="Column ${i + 1} transform">${FIELD_TRANSFORMS.map(([v, label]) => `<option value="${v}" ${(c.transform || 'none') === v ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+  </div>`).join('');
+  return `<div id="columnList">${rows}</div><button type="button" class="soft wide" id="addColumn">+ Add column</button><div id="columnPreview" aria-live="polite"></div><p class="hint">Choose fields with <b>{}</b>. Column names are unique; exact references keep their type.</p>`;
+}
+function availableFields(node, perItem = false) {
+  return fieldCatalog({ workflow, path: currentPath(), nodeId: node.id, input: parseInput(), perItem, observed: traceUI?.fieldSample(currentPath(), node.id, perItem) });
+}
+function refreshColumnPreview() {
+  const slot = $('#columnPreview'), node = currentNode(); if (!slot || !node) return;
+  const fields = new Map(availableFields(node, node.type === 'map').map(f => [f.path, f]));
+  const columns = Array.isArray(node.config.columns) ? node.config.columns : [];
+  const cells = columns.slice(0, 8).map(c => {
+    const ref = typeof c.value === 'string' ? c.value.match(/^\s*{{\s*([^{}]+?)\s*}}\s*$/)?.[1] : null;
+    const source = ref ? fields.get(ref) : typeof c.value !== 'string' || !c.value.includes('{{') ? { hasSample: true, sample: c.value === undefined ? '' : c.value, origin: 'Configured literal' } : null;
+    if (!source?.hasSample) return { name: c.name, value: source?.observed ? 'Sample unavailable' : 'Not run yet', pending: true };
+    try { return { name: c.name, value: JSON.stringify(transformField(source.sample, c.transform)), origin: source.origin, edited: source.edited, item: source.item }; }
+    catch (error) { return { name: c.name, value: error.message, error: true }; }
+  });
+  if (!cells.length) { slot.innerHTML = ''; return; }
+  const origins = [...new Set(cells.map(c => c.origin).filter(Boolean))];
+  const item = cells.find(c => c.item)?.item;
+  slot.innerHTML = `<p class="csv-summary">Mapped columns · ${esc(origins.join(' / ') || 'Configured fields')}${item ? ` · item ${item}` : ''}${cells.some(c => c.edited) ? ' · edited since run' : ''}</p><div class="csv-table-wrap"><table><thead><tr>${cells.map(c => `<th>${esc(c.name || '(name needed)')}</th>`).join('')}</tr></thead><tbody><tr>${cells.map(c => `<td class="${c.pending ? 'muted' : c.error ? 'csv-error' : ''}">${esc(c.value)}</td>`).join('')}</tr></tbody></table></div>${columns.length > 8 ? '<p class="hint">Showing the first 8 columns.</p>' : ''}`;
+}
+
 function renderInspector() {
   updateEditingTools();
   const box = $('#inspector');
@@ -647,12 +736,12 @@ function renderInspector() {
   if (node.type === 'map' || node.type === 'filter') {
     const map = node.type === 'map';
     body += field('Items', textarea('source', node.config.source ?? '{{input.items}}', 2), 'A list, e.g. {{rows}} or {{filtered}}.');
-    body += field(map ? 'Transform using' : 'Keep items using', `<select data-field="mode"><option value="${map ? 'value' : 'conditions'}" ${node.config.mode !== 'workflow' ? 'selected' : ''}>${map ? 'Inline value' : 'Inline rules'}</option><option value="workflow" ${node.config.mode === 'workflow' ? 'selected' : ''}>Nested workflow</option></select>`);
+    body += field(map ? 'Transform using' : 'Keep items using', `<select data-field="mode"><option value="${map ? 'value' : 'conditions'}" ${node.config.mode !== 'workflow' ? 'selected' : ''}>${map ? 'Inline mapping or value' : 'Inline rules'}</option><option value="workflow" ${node.config.mode === 'workflow' ? 'selected' : ''}>Nested workflow</option></select>`);
     if (node.config.mode === 'workflow') {
       body += `<button type="button" class="soft wide open-nested">Edit ${map ? 'body' : 'predicate'} ↗</button><p class="hint">${map ? 'Return one value per item.' : 'Return a boolean: true keeps the original item; false removes it.'}</p>`;
     } else if (map) {
-      body += field('Value format', `<select data-field="format"><option value="value" ${node.config.format !== 'json' ? 'selected' : ''}>Value or text</option><option value="json" ${node.config.format === 'json' ? 'selected' : ''}>JSON template</option></select>`);
-      body += field('New value', textarea('value', node.config.value ?? '{{item}}', 5), node.config.format === 'json' ? 'Example: {"name": {{item.name}}, "position": {{index}}}' : 'Example: {{item.name}}. Exact references keep their type.');
+      body += field('Value format', valueFormat(node));
+      body += node.config.format === 'fields' ? columnRows(node) : field('New value', textarea('value', node.config.value ?? '{{item}}', 5), node.config.format === 'json' ? 'Example: {"name": {{item.name}}, "position": {{index}}}' : 'Example: {{item.name}}. Exact references keep their type.');
     } else {
       body += field('Match', `<select data-field="match"><option value="all" ${node.config.match !== 'any' ? 'selected' : ''}>All rules</option><option value="any" ${node.config.match === 'any' ? 'selected' : ''}>Any rule</option></select>`);
       body += `<div class="section-label">Keep when</div><div id="conditionList">${conditionRows(node)}</div><button type="button" class="soft wide" id="addCondition">+ Add rule</button>`;
@@ -675,8 +764,8 @@ function renderInspector() {
     body += `<button type="button" class="soft wide open-nested" data-nested="workflow">View body ↗</button>`;
   }
   if (node.type === 'output') {
-    body += field('Output format', `<select data-field="format"><option value="value" ${node.config.format !== 'json' ? 'selected' : ''}>value / template</option><option value="json" ${node.config.format === 'json' ? 'selected' : ''}>JSON template</option></select>`);
-    body += field('Value', textarea('value', node.config.value, 7, '{{input}}'), node.config.format === 'json' ? 'JSON placeholders are inserted as real JSON values. Example: {"item": {{item}}}' : 'An exact {{path}} returns the raw value; mixed text interpolates it.');
+    body += field('Output format', valueFormat(node));
+    body += node.config.format === 'fields' ? columnRows(node) : field('Value', textarea('value', node.config.value, 7, '{{input}}'), node.config.format === 'json' ? 'JSON placeholders are inserted as real JSON values. Example: {"item": {{item}}}' : 'An exact {{path}} returns the raw value; mixed text interpolates it.');
   }
   if (node.type === 'input') body += stack.length === 1
     ? '<p class="hint">This is where your workflow starts. Its data comes from the Workflow input panel on the left.</p><button type="button" class="soft wide" id="editRunInputBtn">Edit workflow input →</button>'
@@ -687,6 +776,8 @@ function renderInspector() {
   box.dataset.nodeKey = key;
   box.querySelectorAll('.node-settings, .wf-disclosure').forEach(d => { const title = d.querySelector('summary').textContent; if (disclosureStates.has(title)) d.open = disclosureStates.get(title); });
   wireInspector(node);
+  fieldPicker?.attach(node);
+  refreshColumnPreview();
   if (node.type === 'csv') refreshCSVPreview(node);
   on($('.close-inspector'), 'click', closeInspector);
   traceUI?.refreshInspector();
@@ -732,6 +823,7 @@ function wireInspector(node) {
     const key = el.dataset.field;
     const value = el.type === 'checkbox' ? el.checked : el.type === 'number' ? Number(el.value) : el.value;
     if (key === 'label') node.label = value; else node.config[key] = value;
+    if (key === 'format' && value === 'fields' && !node.config.columns) node.config.columns = [{ name: 'new_column', value: '', transform: 'none' }];
     if (key === 'decisionType' && value === 'choice' && (!node.config.options || node.config.options.length < 2)) {
       node.config.options = [
         { key: 'option_a', label: 'Option A', description: 'First option.' },
@@ -741,6 +833,7 @@ function wireInspector(node) {
     syncNodeCell(node);
     markDirty(el);
     if (['resultAs', 'collectAs'].includes(key)) refreshReferenceHelp(node);
+    if (['source', 'keepOriginal'].includes(key)) refreshColumnPreview();
     if (node.type === 'csv' && ['content', 'delimiter'].includes(key)) refreshCSVPreview(node);
     if (key === 'decisionType' || key === 'format' || key === 'outputFormat' || (key === 'mode' && ['map', 'filter', 'csv'].includes(node.type))) renderGraph();
   }));
@@ -773,7 +866,11 @@ function wireInspector(node) {
     const i = Number(el.closest('[data-index]')?.dataset.index);
     if (!Number.isInteger(i) || !node.config.conditions?.[i]) return;
     node.config.conditions[i][el.dataset.cond] = el.value;
-    if (el.dataset.cond === 'op') el.closest('[data-index]').querySelector('[data-cond="right"]').disabled = ['exists','not_exists','empty','not_empty'].includes(el.value);
+    if (el.dataset.cond === 'op') {
+      const right = el.closest('[data-index]').querySelector('[data-cond="right"]');
+      right.disabled = ['exists','not_exists','empty','not_empty'].includes(el.value);
+      const picker = right.parentElement.querySelector('.reference-pick'); if (picker) picker.disabled = right.disabled;
+    }
     syncNodeCell(node);
     markDirty(el);
   }));
@@ -783,6 +880,21 @@ function wireInspector(node) {
     node.config.assignments[i][el.dataset.assign] = el.value;
     syncNodeCell(node);
     markDirty(el);
+  }));
+  $('#inspector').querySelectorAll('[data-mapping]').forEach(el => on(el, eventFor(el), () => {
+    const column = node.config.columns?.[Number(el.closest('[data-index]').dataset.index)]; if (!column) return;
+    column[el.dataset.mapping] = el.value;
+    syncNodeCell(node); markDirty(el); refreshColumnPreview();
+  }));
+  on($('#addColumn'), 'click', () => {
+    node.config.columns ||= [];
+    node.config.columns.push({ name: '', value: '', transform: 'none' });
+    syncNodeCell(node); markDirty(); renderInspector();
+    $('#columnList .column-row:last-child [data-mapping="name"]')?.focus();
+  });
+  $('#inspector').querySelectorAll('[data-remove-column]').forEach(b => on(b, 'click', () => {
+    node.config.columns.splice(Number(b.dataset.removeColumn), 1);
+    syncNodeCell(node); markDirty(); renderInspector();
   }));
   on($('#addOption'), 'click', () => {
     node.config.options ||= [];
@@ -1025,7 +1137,8 @@ function init() {
     onChange: renderInspector,
   });
   initGraph(); renderPalette();
-  traceUI = createTraceUI({ nodeColors: COLORS, onJump: jumpToStep, onExpand: toggleBody, onEdit: editBody, getGraph: () => graph, getRecords: () => canvasRecords, getContext: contextRecords, getSelected: selectedRecord });
+  traceUI = createTraceUI({ nodeColors: COLORS, onJump: jumpToStep, onExpand: toggleBody, onEdit: editBody, getGraph: () => graph, getRecords: () => canvasRecords, getContext: contextRecords, getSelected: selectedRecord, onScopeChange: refreshColumnPreview });
+  fieldPicker = createFieldPicker({ catalog: availableFields });
   $('#workflowName').value = workflow.name || 'Workflow'; $('#runInput').value = restoredInputText ?? (typeof runInput === 'string' ? runInput : pretty(runInput));
   history = new EditorHistory(editorSnapshot());
   on($('#workflowName'), 'input', e => { workflow.name = e.target.value; stack[0].label = workflow.name; renderBreadcrumbs(); markDirty(e.target); });
@@ -1056,7 +1169,7 @@ function init() {
   });
   graph.on('node:dblclick', ({ node }) => { const record = canvasRecords.nodes.find(r => r.cellId === node.id); if (record && hasBody(record.node)) toggleBody(record); });
   document.addEventListener('keydown', e => {
-    if ($('#libraryDialog').open || $('#inputDialog').open || $('#diagnosticDialog').open) return;
+    if ($('#libraryDialog').open || $('#inputDialog').open || $('#diagnosticDialog').open || $('#fieldPickerDialog').open) return;
     const editingText = document.activeElement?.matches('input, textarea, select, [contenteditable="true"]');
     const modifier = e.ctrlKey || e.metaKey;
     if (modifier && e.key === 'Enter') { e.preventDefault(); runWorkflow(); }

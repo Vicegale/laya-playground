@@ -7,12 +7,12 @@ const compact = v => { const s = JSON.stringify(v) ?? '[undefined]'; return s.le
 const colors = { running: '#e9c46a', success: '#80ed99', warning: '#e9c46a', error: '#f39b9b' };
 const states = { running: 'Running', success: 'Complete', warning: 'Warning', error: 'Failed' };
 
-export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, getRecords, getContext, getSelected }) {
+export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, getRecords, getContext, getSelected, onScopeChange = () => {} }) {
   const $ = s => document.querySelector(s);
   const dialog = $('#diagnosticDialog');
   const layer = $('#canvasAnnotations');
   const selection = new TraceSelection();
-  let run = null, pendingFrame = null, inspectedSequence = null, inspectedNode = null, activeTab = 'result', modalSignature = null;
+  let run = null, pendingFrame = null, inspectedSequence = null, inspectedNode = null, activeTab = 'result', modalSignature = null, pickingOutputs = false;
   let surfaces = new Map();
 
   const fileFor = step => step && step.status !== 'error' ? run?.files?.find(f => f.sequence === step.sequence) : null;
@@ -63,7 +63,8 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
       <div class="diagnostic-tabs" role="tablist" aria-label="Step details">${[['result','Result'],['inputs','Inputs'],['debug','Diagnostics']].map(([id,label]) => `<button type="button" role="tab" id="tab-${id}" data-diagnostic-tab="${id}" aria-controls="panel-${id}" aria-selected="${activeTab === id}" tabindex="${activeTab === id ? 0 : -1}">${label}</button>`).join('')}</div>
       <div id="panel-result" role="tabpanel" aria-labelledby="tab-result" ${activeTab !== 'result' ? 'hidden' : ''}>
         ${outputCard(step)}
-        ${step.port ? `<p class="diagnostic-route">${['next','done'].includes(step.port) ? 'Next' : 'Selected branch'} <b>${['next','done'].includes(step.port) ? esc(step.nextNode?.label || 'End of flow') : esc(step.port)}</b>${!['next','done'].includes(step.port) && step.nextNode ? ` → ${esc(step.nextNode.label)}` : ''}</p>` : ''}
+        ${step.port ? `<p class="diagnostic-route">${['next','done'].includes(step.port) ? 'Next' : 'Selected branch'} <b>${esc(['next','done'].includes(step.port) ? (step.nextNodes || (step.nextNode ? [step.nextNode] : [])).map(n => n.label).join(', ') || 'End of branch' : step.port)}</b>${!['next','done'].includes(step.port) && step.nextNodes?.length ? ` → ${step.nextNodes.map(n => esc(n.label)).join(', ')}` : ''}</p>` : ''}
+        ${new Set((step.sources || []).map(s => s.nodeId)).size > 1 ? `<p class="diagnostic-route">Joined ${new Set(step.sources.map(s => s.nodeId)).size} active branches: ${[...new Set(step.sources.map(s => s.label))].map(esc).join(', ')}</p>` : ''}
         ${step.sort ? `<p class="diagnostic-route">Sorted by <b>${esc(step.sort.column)}</b> · ${esc(step.sort.direction === 'desc' ? 'descending' : 'ascending')}</p>` : ''}
         ${probabilities(step)}
         ${step.tests ? jsonSection(step.type === 'switch' ? 'Cases checked' : 'Rules checked', step.tests) : ''}
@@ -97,7 +98,8 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
       return;
     }
     inspectedSequence = step.sequence;
-    const signature = JSON.stringify([step, run.edited, activeTab, selection.steps(step.workflowPath, step.nodeId).map(t => t.sequence)]);
+    const choices = pickingOutputs ? run.trace.filter(t => ['output','csv-output'].includes(t.type) && !t.workflowPath.length && t.status !== 'error') : selection.steps(step.workflowPath, step.nodeId);
+    const signature = JSON.stringify([pickingOutputs,step, run.edited, activeTab, choices.map(t => t.sequence)]);
     if (signature === modalSignature) return;
     modalSignature = signature;
     const focusedTab = dialog.querySelector('[role="tab"]:focus')?.id;
@@ -105,10 +107,9 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
     $('#diagnosticLocation').textContent = step.location;
     $('#diagnosticNotice').textContent = run.edited ? 'Edited since this run. Values below come from the run snapshot.' : '';
     $('#jumpDiagnosticBtn').disabled = false;
-    const choices = selection.steps(step.workflowPath, step.nodeId);
     const picker = $('#diagnosticStepPicker');
     picker.hidden = choices.length < 2;
-    picker.innerHTML = choices.map(t => `<option value="${t.sequence}" ${t.sequence === step.sequence ? 'selected' : ''}>Step ${t.sequence} · ${t.type === 'map-value' || t.type === 'filter-test' ? 'item result' : t.detail || states[t.status]}</option>`).join('');
+    picker.innerHTML = choices.map(t => `<option value="${t.sequence}" ${t.sequence === step.sequence ? 'selected' : ''}>${pickingOutputs ? esc(t.label) + ' · ' : ''}Step ${t.sequence} · ${t.type === 'map-value' || t.type === 'filter-test' ? 'item result' : t.detail || states[t.status]}</option>`).join('');
     const detail = $('#diagnosticDetail');
     const oldDetails = Number(detail.dataset.sequence) === step.sequence ? new Map([...detail.querySelectorAll('details')].map(d => [d.querySelector('summary').textContent, d.open])) : new Map();
     $('#diagnosticDetail').innerHTML = modalContent(step);
@@ -116,13 +117,15 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
     detail.querySelectorAll('details').forEach(d => { const title = d.querySelector('summary').textContent; if (oldDetails.has(title)) d.open = oldDetails.get(title); });
     if (focusedTab) $(`#${focusedTab}`)?.focus();
   }
-  function inspect(sequence) {
+  function inspect(sequence, allOutputs = false) {
+    pickingOutputs = allOutputs;
     const step = run?.trace.find(t => t.sequence === sequence); if (!step) return;
     inspectedSequence = sequence; inspectedNode = null; activeTab = step.status === 'error' ? (step.references.some(r => r.missing) ? 'debug' : 'inputs') : 'result';
     refreshModal();
     if (!dialog.open) dialog.showModal();
   }
   function inspectNode(record) {
+    pickingOutputs = false;
     const step = selection.step(record.path, record.node.id);
     if (!step) return;
     inspectedSequence = step.sequence; inspectedNode = record; activeTab = step.status === 'error' ? (step.references.some(r => r.missing) ? 'debug' : 'inputs') : 'result';
@@ -148,7 +151,7 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
     const graph = getGraph(); if (!graph) return;
     const records = getRecords();
     for (const record of records.edges) {
-      const taken = run && run.trace.some(t => t.edgeId === record.edge.id && JSON.stringify(t.workflowPath) === JSON.stringify(record.path) && selection.matches(t));
+      const taken = run && run.trace.some(t => (t.edgeId === record.edge.id || t.edgeIds?.includes(record.edge.id)) && JSON.stringify(t.workflowPath) === JSON.stringify(record.path) && selection.matches(t));
       graph.getCellById(record.cellId)?.attr('line/stroke', taken ? '#80ed99' : '#596273');
     }
     for (const record of records.nodes) {
@@ -174,6 +177,7 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
     }
   }
   function refreshInspector() {
+    onScopeChange();
     const slot = $('#nodeRunDetails'); const record = getSelected();
     if (!slot || !record) return;
     slot.hidden = !run;
@@ -197,6 +201,8 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
       $('#runSummary').textContent = `${run.status === 'running' ? 'Running' : run.error ? `Failed at ${run.error.step?.label || 'workflow'}` : run.status === 'warning' ? 'Finished with warnings' : 'Completed'} · ${count} steps${run.edited ? ' · edited since run' : ''}${run.traceOmitted ? ` · ${run.traceOmitted} earlier steps omitted` : ''}`;
       $('#inspectFailureBtn').hidden = !run.error?.step;
       $('#exportDiagnosticsBtn').disabled = run.status === 'running';
+      const terminalCount = run.outputs?.length || run.trace.filter(t => ['output','csv-output'].includes(t.type) && !t.workflowPath.length && t.status !== 'error').length;
+      $('#runOutputBtn').textContent = terminalCount > 1 ? `Outputs (${terminalCount}) ↗` : 'Output ↗';
       $('#runOutputBtn').disabled = !run.trace.some(t => ['output', 'csv-output'].includes(t.type) && !t.workflowPath.length);
     }
     const context = $('#viewItemPickers');
@@ -237,7 +243,7 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
   $('#inspector').addEventListener('click', handleDownload);
   $('#diagnosticDetail').addEventListener('click', handleDownload);
   $('#inspectFailureBtn').addEventListener('click', () => { if (run?.error?.step) { selection.reveal(run.error.step); render(); inspect(run.error.step.sequence); } });
-  $('#runOutputBtn').addEventListener('click', () => { const step = run?.trace.filter(t => ['output', 'csv-output'].includes(t.type) && !t.workflowPath.length).at(-1); if (step) inspect(step.sequence); });
+  $('#runOutputBtn').addEventListener('click', () => { const step = run?.trace.filter(t => ['output', 'csv-output'].includes(t.type) && !t.workflowPath.length).at(-1); if (step) inspect(step.sequence, true); });
   $('#closeDiagnosticBtn').addEventListener('click', () => dialog.close());
   $('#jumpDiagnosticBtn').addEventListener('click', () => {
     const step = run?.trace.find(t => t.sequence === inspectedSequence); if (!step) return;
@@ -258,7 +264,7 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
   });
   $('#exportDiagnosticsBtn').addEventListener('click', () => {
     if (!run) return;
-    const packet = { version: 1, startedAt: run.startedAt, finishedAt: run.finishedAt, status: run.status, editedSinceRun: run.edited, previewsAreBounded: true, workflow: run.workflow, input: previewValue(run.input), model: run.model, lang: run.lang, trace: run.trace, earlierStepsOmitted: run.traceOmitted, output: run.output, error: run.error ? { message: run.error.message, failedStep: run.error.step?.sequence } : null };
+    const packet = { version: 1, startedAt: run.startedAt, finishedAt: run.finishedAt, status: run.status, editedSinceRun: run.edited, previewsAreBounded: true, workflow: run.workflow, input: previewValue(run.input), model: run.model, lang: run.lang, trace: run.trace, earlierStepsOmitted: run.traceOmitted, output: run.output, outputs: run.outputs, error: run.error ? { message: run.error.message, failedStep: run.error.step?.sequence } : null };
     const url = URL.createObjectURL(new Blob([JSON.stringify(packet, null, 2)], { type: 'application/json' }));
     const link = document.createElement('a'); link.href = url; link.download = 'workflow-diagnostics.json'; document.body.append(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1500);
@@ -268,12 +274,12 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
       selection.reset();
       if (dialog.open) dialog.close();
       run = { ...snapshot, startedAt: new Date().toISOString(), status: 'running', trace: [], traceOmitted: 0, edited: false, files: [] };
-      inspectedSequence = inspectedNode = modalSignature = null; render();
+      inspectedSequence = inspectedNode = modalSignature = null; pickingOutputs = false; render();
     },
     update({ trace, traceOmitted, files = [] }) { if (run) { run.trace = trace; run.traceOmitted = traceOmitted; run.files = files; schedule(); } },
-    finish({ trace, traceOmitted = 0, output, error, files = error?.files || [] }) {
+    finish({ trace, traceOmitted = 0, output, outputs = [], error, files = error?.files || [] }) {
       if (!run) return;
-      Object.assign(run, { trace, traceOmitted, files, output: previewValue(output), error, status: error ? 'failed' : trace.some(t => t.status === 'warning') ? 'warning' : 'completed', finishedAt: new Date().toISOString() });
+      Object.assign(run, { trace, traceOmitted, files, output: previewValue(output), outputs: outputs.map(o => ({ ...o, value: previewValue(o.value) })), error, status: error ? 'failed' : trace.some(t => t.status === 'warning') ? 'warning' : 'completed', finishedAt: new Date().toISOString() });
       if (pendingFrame !== null) { cancelAnimationFrame(pendingFrame); pendingFrame = null; }
       if (error?.step) selection.reveal(error.step);
       render(); if (dialog.open) refreshModal();
@@ -281,6 +287,10 @@ export function createTraceUI({ nodeColors, onJump, onExpand, onEdit, getGraph, 
     markEdited() { if (run) { run.edited = true; schedule(); } },
     canvasChanged() { buildSurfaces(); render(); },
     transformLayer, refreshInspector, highlight, inspectNode,
+    fieldSample(path, id, perItem = false) {
+      const step = perItem ? selection.itemStep(path, id) : selection.step(path, id);
+      return step ? { scope: step.scope, edited: run.edited, item: step.iterations.at(-1)?.index + 1 || null } : null;
+    },
     moveSurface(node) { const record = getRecords().nodes.find(r => r.cellId === node.id); const surface = record && surfaces.get(record.key); if (surface) { const p = node.position(); surface.style.left = `${p.x + 10}px`; surface.style.top = `${p.y + 54}px`; } },
     reveal(step) { selection.reveal(step); },
   };

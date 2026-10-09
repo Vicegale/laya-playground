@@ -22,3 +22,13 @@ stock-model validation on 2026-10-08 completed 99 decisions/300 traced steps,
 exported all 99 unique IDs with unchanged original cells and stable alphabetical
 category groups. Labels matched 88 of the 99 intended sample categories; this
 example preserves model answers without corrections.
+
+## Product review fan-out example
+
+Import **product-reviews-fanout.json** and run it to tag all 100 fictional reviews
+in **product-reviews.csv**. Every row runs separate Sentiment and Topic Decisions,
+then joins at one Output. Map retains the four original columns and adds
+`sentiment`, `sentiment_confidence`, `topic`, and `topic_confidence`. Download
+**tagged-reviews.csv** from CSV Output. This runs 200 model decisions; labels and
+confidences are the actual model answers. The editor example uses three rows
+for a quick trial.

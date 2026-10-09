@@ -1,5 +1,7 @@
 import { previewValue, valueType } from './workflow-diagnostics.js';
 import { parseCSV, stringifyCSV, csvFilename, sortCSVRows } from './workflow-csv.js';
+import { mapColumns, validateColumns } from './workflow-fields.js';
+import { edgesFor, executionGraph, forkContext, advanceState, mergeStates } from './workflow-execution-graph.js';
 
 const MAX_STEPS = 500;
 const MAX_TRACE_STEPS = 1000;
@@ -176,11 +178,6 @@ export function evalCondition(condition, scope) {
   }
 }
 
-function edgeFor(workflow, nodeId, port, exactOnly = false) {
-  const exact = workflow.edges.find(e => e.from === nodeId && e.fromPort === port);
-  if (exact || exactOnly) return exact || null;
-  return workflow.edges.find(e => e.from === nodeId && (!e.fromPort || e.fromPort === 'next')) || null;
-}
 
 function startNode(workflow) {
   return workflow.nodes.find(n => n.type === 'input') || workflow.nodes.find(n => !workflow.edges.some(e => e.to === n.id));
@@ -316,7 +313,7 @@ async function runNode(node, workflow, ctx, env, depth, step) {
     }
     if (!selected) throw new Error(`Decision “${node.label || node.id}” returned no choice.`);
     const stored = { ...clone(answer), choice: selected, confidence: answerConfidence(answer, selected) };
-    ctx.decisions[key] = stored;
+    Object.defineProperty(ctx.decisions, key, { value: stored, enumerable: true, writable: true, configurable: true });
     if (cfg.resultAs) setVar(ctx, cfg.resultAs, selected);
     Object.assign(step, { detail: selected, answer: previewValue(stored), output: previewValue(stored) });
     return { port: selected };
@@ -372,8 +369,8 @@ async function runNode(node, workflow, ctx, env, depth, step) {
   if (node.type === 'map-value') {
     recordListCount(step, 'input', ctx.locals.item);
     const template = cfg.value ?? '{{item}}';
-    const rendered = resolve(template, 'Mapped value');
-    const value = cfg.format === 'json' ? renderJsonTemplate(template, scope) : clone(rendered);
+    const rendered = cfg.format === 'fields' ? undefined : resolve(template, 'Mapped value');
+    const value = cfg.format === 'fields' ? mapColumns(cfg.columns, resolve) : cfg.format === 'json' ? renderJsonTemplate(template, scope) : clone(rendered);
     if (value === undefined) throw new Error('Map value resolved to undefined. Check the missing references or return an explicit null.');
     recordListCount(step, 'output', value);
     Object.assign(step, { detail: 'mapped', output: previewValue(value) });
@@ -394,6 +391,7 @@ async function runNode(node, workflow, ctx, env, depth, step) {
     notifyTrace(env);
     if (!cfg.resultAs?.trim()) throw new Error('Choose a variable under Store list as.');
     const nested = cfg.mode === 'workflow';
+    if (node.type === 'map' && !nested && cfg.format === 'fields') validateColumns(cfg.columns);
     if (nested && !cfg.workflow?.nodes?.length) throw new Error('The per-item workflow is empty.');
     const results = [];
     step.itemCount = source.length;
@@ -538,8 +536,8 @@ async function runNode(node, workflow, ctx, env, depth, step) {
   if (node.type === 'output') {
     const outputScope = scopeFor(ctx);
     const template = cfg.value || (cfg.format === 'json' ? 'null' : '{{input}}');
-    resolve(template, 'Output');
-    const value = cfg.format === 'json'
+    if (cfg.format !== 'fields') resolve(template, 'Output');
+    const value = cfg.format === 'fields' ? mapColumns(cfg.columns, resolve) : cfg.format === 'json'
       ? renderJsonTemplate(cfg.value || 'null', outputScope)
       : renderTemplate(cfg.value || '{{input}}', outputScope);
     recordListCount(step, 'input', value);
@@ -570,56 +568,84 @@ export async function executeWorkflow(workflow, contextOrInput, options = {}, de
   env.iterations ||= [];
   env.files ||= [];
 
-  let node = startNode(workflow);
-  if (!node) throw new Error('Workflow has no starting node.');
-  let steps = 0;
-  while (node) {
+  const start = startNode(workflow);
+  if (!start) throw new Error('Workflow has no starting node.');
+  const plan = executionGraph(workflow, start);
+  const initial = { context: forkContext(ctx), events: [], ancestors: new Set() };
+  const states = new Map(), activated = new Map(), outputs = [];
+  let steps = 0, lastContext = ctx;
+  // Topological order settles inactive alternatives too, so a join waits for
+  // active siblings without waiting forever for an unselected conditional port.
+  const order = plan.cycle ? [plan.cycle] : plan.order;
+  for (const id of order) {
+    const node = plan.nodes.get(id);
+    const incomingEdges = activated.get(id) || [];
+    if (!plan.cycle && id !== start.id && !incomingEdges.length) continue;
+    const parents = [...new Set(incomingEdges.map(edge => edge.from))].map(id => states.get(id));
     const step = {
       sequence: ++env.stats.seen, nodeId: node.id, label: node.label || node.type, type: node.type, depth,
       workflowPath: [...env.workflowPath], location: [...env.pathLabels, node.label || node.type].join(' → '), iterations: [...env.iterations],
       status: 'running', references: [], warnings: [], config: previewValue(node.config || {}),
-      scope: { input: previewValue(ctx.input), variables: previewValue(ctx.vars), locals: previewValue(ctx.locals), decisions: previewValue(ctx.decisions) },
+      scope: { input: previewValue(ctx.input), variables: {}, locals: previewValue(ctx.locals), decisions: {} },
+      sources: incomingEdges.map(edge => ({ edgeId: edge.id, nodeId: edge.from, label: plan.nodes.get(edge.from)?.label || edge.from, port: edge.fromPort || 'next' })),
       startedAt: new Date().toISOString(),
     };
     env.trace.push(step);
     if (env.trace.length > MAX_TRACE_STEPS) { env.trace.shift(); env.stats.omitted++; }
-    notifyTrace(env);
     const started = now();
     try {
-      if (++steps > MAX_STEPS) throw new Error(`Workflow exceeded ${MAX_STEPS} steps. Check for a cycle.`);
-      const result = await runNode(node, workflow, ctx, env, depth, step);
+      if (plan.cycle) throw new Error(`Workflow contains a cycle at “${node.label || node.id}”. Use For Each, Map or Filter to repeat items.`);
+      const incoming = parents.length ? mergeStates(parents, initial) : initial;
+      const branch = forkContext(incoming.context);
+      step.scope = { input: previewValue(branch.input), variables: previewValue(branch.vars), locals: previewValue(branch.locals), decisions: previewValue(branch.decisions) };
+      notifyTrace(env);
+      if (++steps > MAX_STEPS) throw new Error(`Workflow exceeded ${MAX_STEPS} steps.`);
+      const result = await runNode(node, workflow, branch, env, depth, step);
+      const state = advanceState(incoming, branch, node, step.sequence);
+      states.set(node.id, state); lastContext = branch;
       step.port = result.port;
-      step.after = { variables: previewValue(ctx.vars), decisions: previewValue(ctx.decisions) };
+      step.after = { variables: previewValue(branch.vars), decisions: previewValue(branch.decisions) };
       step.status = step.warnings.length ? 'warning' : 'success';
       if (result.terminal) {
         if (env.outputContract === 'boolean' && typeof result.output !== 'boolean') throw new Error(`Filter body must return true or false, got ${valueType(result.output)}. Use JSON format for a literal boolean.`);
         if (env.outputContract === 'value' && result.output === undefined) throw new Error('Map body must return a value. Check the Output references or return an explicit null.');
-        if (env.outputContract === 'row' && (!ctx.locals.item || typeof ctx.locals.item !== 'object' || Array.isArray(ctx.locals.item) || !result.output || typeof result.output !== 'object' || Array.isArray(result.output))) throw new Error('Keep original fields requires both the item and mapped output to be objects. Return an object of new column values.');
-        return { output: result.output, context: ctx, trace: env.trace, traceOmitted: env.stats.omitted, files: env.files };
+        if (env.outputContract === 'row' && (!branch.locals.item || typeof branch.locals.item !== 'object' || Array.isArray(branch.locals.item) || !result.output || typeof result.output !== 'object' || Array.isArray(result.output))) throw new Error('Keep original fields requires both the item and mapped output to be objects. Return an object of new column values.');
+        if (env.outputContract && outputs.length) throw new Error('Map and Filter bodies must reach exactly one final Output per item. Connect the active branches to a shared Output node.');
+        outputs.push({ nodeId: node.id, label: step.label, sequence: step.sequence, workflowPath: [...env.workflowPath], value: result.output });
+        continue;
       }
-      const edge = edgeFor(workflow, node.id, result.port, node.type === 'switch');
-      if (!edge) {
+      const edges = edgesFor(workflow, node.id, result.port, node.type === 'switch');
+      if (!edges.length) {
         if (env.outputContract) throw new Error(`The per-item workflow stopped at unconnected output “${result.port}”. Connect this branch to an Output node.`);
         step.status = 'warning';
-        step.warnings.push(`No connection from output “${result.port}”. The run stopped here without an Output node.`);
-        return { output: undefined, context: ctx, trace: env.trace, traceOmitted: env.stats.omitted, files: env.files };
+        step.warnings.push(`No connection from output “${result.port}”. This branch stopped without an Output node.`);
+        continue;
       }
-      step.edgeId = edge.id;
-      const next = workflow.nodes.find(n => n.id === edge.to);
-      if (!next) throw new Error(`Connection points to missing node “${edge.to}”.`);
-      step.nextNode = { id: next.id, label: next.label || next.type };
-      node = next;
+      const nextNodes = edges.map(edge => {
+        const next = plan.nodes.get(edge.to);
+        if (!next) throw new Error(`Connection points to missing node “${edge.to}”.`);
+        return { id: next.id, label: next.label || next.type };
+      });
+      step.edgeIds = edges.map(edge => edge.id);
+      step.nextNodes = nextNodes;
+      // Preserve existing diagnostic/export readers for single-connection flows.
+      if (edges.length === 1) { step.edgeId = edges[0].id; step.nextNode = nextNodes[0]; }
+      for (const edge of edges) {
+        if (!activated.has(edge.to)) activated.set(edge.to, []);
+        activated.get(edge.to).push(edge);
+      }
     } catch (cause) {
-      step.status = 'error';
-      step.error = cause.message || String(cause);
-      step.detail = 'Failed';
+      step.status = 'error'; step.error = cause.message || String(cause); step.detail = 'Failed';
+      if (cause.mergeConflict) step.mergeConflict = cause.mergeConflict;
       throw cause instanceof WorkflowExecutionError ? cause : new WorkflowExecutionError(cause, step, env);
     } finally {
       step.durationMs = Math.round((now() - started) * 100) / 100;
       notifyTrace(env);
     }
   }
-  return { output: undefined, context: ctx, trace: env.trace, traceOmitted: env.stats.omitted, files: env.files };
+  Object.assign(ctx, lastContext);
+  return { output: outputs.length === 1 ? outputs[0].value : outputs.length ? outputs.map(o => o.value) : undefined,
+    outputs, context: ctx, trace: env.trace, traceOmitted: env.stats.omitted, files: env.files };
 }
 
 export async function defaultPredict(payload) {
